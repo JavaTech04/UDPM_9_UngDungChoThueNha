@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9"
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+      crossorigin="anonymous"
+    ></script>
+    <script src="libs/angular.min.js"></script>
+    <script src="libs/angular-router.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/web3@1.5.2/dist/web3.min.js"></script>
+    <style>
+      .search-form input {
+        width: 730px; /* Đặt chiều rộng mong muốn */
+        height: 40px;
+        margin-top: 20px;
+        margin-left: 300px; /* Đặt khoảng cách giữa ô tìm kiếm và nút */
+      }
+
+      .navbar-nav .search-form button {
+        margin-top: 20px;
+        height: 40px;
+        margin-left: 10px; /* Đặt khoảng cách giữa nút tìm kiếm và phần còn lại của thanh điều hướng */
+      }
+    </style>
+  </head>
+  <body ng-app="myApp">
+    <nav class="navbar navbar-expand-lg">
+      <div class="container-fluid">
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNavAltMarkup"
+          aria-controls="navbarNavAltMarkup"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+          <div class="navbar-nav">
+            <a class="nav-link active" aria-current="page" href="#!/list"
+              ><img
+                src="./img/pngtree-homestay-icon-png-image_5394511.jpg"
+                style="height: 50px; width: 50; margin-left: 20px"
+            /></a>
+            <span class="fs-5 mt-3">Home Hunter</span>
+            <form class="d-flex ms-auto my-2 my-lg-0 search-form">
+              <input
+                class="form-control me-2"
+                type="search"
+                placeholder="Search"
+                aria-label="Search"
+              />
+              <button class="btn btn-success" type="submit">Search</button>
+            </form>
+            <div class="dropdown" style="border: none">
+              <button
+                class="btn dropdown-toggle"
+                type="button"
+                id="connectWalletDropdown"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                <img
+                  src="./img/tải xuống.png"
+                  alt="NFT Wallet"
+                  style="
+                    height: 50px;
+                    width: auto;
+                    margin-top: 10px;
+                    margin-left: 15px;
+                  "
+                />
+                <span id="walletAddress">Kết nối</span>
+              </button>
+              <ul class="dropdown-menu" aria-labelledby="connectWalletDropdown">
+                <li>
+                  <a
+                    class="dropdown-item"
+                    href="#!/wallet"
+                    onclick="connectToNFTWallet()"
+                    >Kết nối</a
+                  >
+                </li>
+                <li>
+                  <button class="dropdown-item" onclick="disconnectNFTWallet()">
+                    Hủy kết nối
+                  </button>
+                </li>
+              </ul>
+            </div>
+            <button
+              id="disconnectWalletBtn"
+              style="display: none"
+              onclick="disconnectWallet()"
+            >
+              Hủy kết nối
+            </button>
+          </div>
+        </div>
+      </div>
+    </nav>
+    <div class="row">
+      <div class="col-sm-3">
+        <div class="d-flex flex-column flex-shrink-0 p-3" style="width: 280px">
+          <hr />
+          <ul class="nav nav-pills flex-column mb-auto">
+            <li class="nav-item">
+              <a
+                href="#!/trang-chu"
+                class="nav-link link-dark fs-5"
+                aria-current="page"
+              >
+                <svg class="bi me-2" width="16" height="16">
+                  <use xlink:href="#home"></use>
+                </svg>
+                Trang chủ
+              </a>
+            </li>
+            <li>
+              <a href="#!/list" class="nav-link link-dark fs-5">
+                <svg class="bi me-2" width="16" height="16">
+                  <use xlink:href="#grid"></use>
+                </svg>
+                Xem Phòng
+              </a>
+            </li>
+            <li>
+              <a href="#!/add" class="nav-link link-dark fs-5">
+                <svg class="bi me-2" width="16" height="16">
+                  <use xlink:href="#grid"></use>
+                </svg>
+                Tạo phòng
+              </a>
+            </li>
+          </ul>
+          <hr />
+        </div>
+      </div>
+      <div class="col-sm-9">
+        <div ng-view></div>
+      </div>
+    </div>
+
+    <script>
+      function connectToNFTWallet() {
+        if (typeof window.ethereum === "undefined") {
+          alert(
+            "Vui lòng cài đặt và kích hoạt MetaMask để kết nối với ví NFT."
+          );
+          return;
+        }
+
+        // Mở cửa sổ popup
+        var popup = window.open(
+          "connect-to-wallet.html",
+          "NFTWalletPopup",
+          "width=600,height=400"
+        );
+
+        // Kiểm tra xem cửa sổ popup có được mở hay không
+        if (!popup || popup.closed || typeof popup.closed == "undefined") {
+          alert("Vui lòng cho phép cửa sổ popup để kết nối với ví NFT.");
+          return;
+        }
+
+        // Kết nối đến ví NFT thông qua Web3.js
+        var web3 = new Web3(window.ethereum);
+        web3.eth
+          .requestAccounts()
+          .then(function (accounts) {
+            // Xử lý khi kết nối thành công
+            var walletAddress = accounts[0];
+            var shortWalletAddress =
+              walletAddress.substring(0, 6) +
+              "..." +
+              walletAddress.substring(walletAddress.length - 4);
+            alert(
+              "Kết nối thành công với ví NFT. Địa chỉ ví của bạn là: " +
+                shortWalletAddress
+            );
+            document.getElementById("walletAddress").textContent =
+              shortWalletAddress;
+            popup.close(); // Đóng cửa sổ popup sau khi kết nối thành công
+          })
+          .catch(function (error) {
+            // Xử lý khi có lỗi xảy ra trong quá trình kết nối
+            console.error("Lỗi khi kết nối với ví NFT:", error);
+            alert("Đã xảy ra lỗi khi kết nối với ví NFT. Vui lòng thử lại.");
+          });
+      }
+
+      function disconnectNFTWallet() {
+        // Xử lý hủy kết nối ví ở đây
+        document.getElementById("walletAddress").textContent = "Connect Wallet";
+        document.getElementById("connectWalletDropdown").innerHTML = `
+            <img src="./img/tải xuống.png" alt="NFT Wallet" style="height: 50px; width: auto; margin-top: 10px">
+            <span id="walletAddress">Kết nối ví</span>
+            <ul class="dropdown-menu" aria-labelledby="connectWalletDropdown">
+                <li><a class="dropdown-item" href="#!/wallet" onclick="connectToNFTWallet()">Kết nối</a></li>
+            </ul>
+        `;
+      }
+    </script>
+  </body>
+  <script src="controller/ListController.js"></script>
+  <script src="controller/DetailController.js"></script>
+  <script src="controller/AddController.js"></script>
+  <script src="js/app.js"></script>
+</html>

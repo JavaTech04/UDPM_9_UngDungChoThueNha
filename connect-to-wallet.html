@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connect to NFT Wallet</title>
+    <script src="https://cdn.jsdelivr.net/npm/web3@1.5.2/dist/web3.min.js"></script>
+    <script>
+        window.addEventListener('load', async () => {
+            // Kiểm tra xem có tồn tại đối tượng ethereum trong trình duyệt không
+            if (window.ethereum) {
+                // Tạo một phiên bản của đối tượng Web3 với đối tượng ethereum
+                const web3 = new Web3(window.ethereum);
+
+                try {
+                    // Gửi yêu cầu kết nối tài khoản
+                    await window.ethereum.request({ method: 'eth_requestAccounts' });
+
+                    // Kết nối thành công, thông báo cho trang chủ
+                    window.opener.postMessage('connected', window.origin);
+
+                    // Đóng cửa sổ popup sau khi kết nối thành công
+                    window.close();
+                } catch (error) {
+                    // Xử lý lỗi nếu có
+                    console.error('Lỗi khi kết nối tài khoản:', error);
+                    alert('Kết nối tài khoản không thành công. Vui lòng thử lại.');
+                }
+            } else {
+                // Trình duyệt không hỗ trợ đối tượng ethereum, thông báo cho người dùng
+                alert('Trình duyệt của bạn không hỗ trợ kết nối với ví NFT.');
+            }
+        });
+    </script>
+</head>
+<body>
+    <div style="text-align: center; margin-top: 50px;">
+        <h1>Connect to NFT Wallet</h1>
+        <p>Please wait while connecting...</p>
+    </div>
+</body>
+</html>

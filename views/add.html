@@ -1,0 +1,22 @@
+<form
+  class="container"
+  name="myForm"
+  ng-submit="add()"
+  enctype="multipart/form-data"
+>
+  <div class="text-center fw-bold fs-1">Người dùng</div>
+  <div class="mt-3">
+    <label class="form-label fw-bold">Ảnh phòng</label>
+    <input class="form-control" type="file" ngf-model="inputValue.anh" />
+  </div>
+  <div class="mt-3">
+    <label class="form-label fw-bold">Địa chỉ</label>
+    <input class="form-control" type="text" ng-model="inputValue.diaChi" />
+  </div>
+  <div class="mt-3">
+    <label class="form-label fw-bold">Giá</label>
+    <input class="form-control" type="text" ng-model="inputValue.gia" />
+  </div>
+  <button type="submit" class="btn btn-success mt-3">Thêm</button>
+  <a class="btn btn-danger mt-3" href="#!/list">Quay lại</a>
+</form>

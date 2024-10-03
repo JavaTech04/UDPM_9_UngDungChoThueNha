@@ -1,0 +1,45 @@
+{
+  "home": [
+    {
+      "id": 1,
+      "diaChi": "Mỹ Đình, Hà Nội",
+      "gia": "2,5Tr/Tháng",
+      "anh": "Nha-Tro.jpg"
+    },
+    {
+      "id": 2,
+      "diaChi": "Thanh Xuân, Hà Nội",
+      "gia": "3Tr/Tháng",
+      "anh": "Nha-Tro-1.jpg"
+    },
+    {
+      "id": 3,
+      "diaChi": "Đình Thôn, Hà Nội",
+      "gia": "2Tr/Tháng",
+      "anh": "Nha-Tro-2.jpg"
+    },
+    {
+      "id": 4,
+      "diaChi": "Hoài Đức, Hà Nội",
+      "gia": "4,5Tr/Tháng",
+      "anh": "Nha-Tro-3.jpg"
+    },
+    {
+      "diaChi": "Long Biên, Hà Nội",
+      "gia": "2,5Tr/Tháng",
+      "id": 5,
+      "anh": "Nha-Tro-4.jpg"
+    },
+    {
+      "diaChi": "Cầu Giấy",
+      "gia": "3,2Tr/Tháng",
+      "id": 6,
+      "anh": "Nha-Tro-5.jpg"
+    },
+    {
+      "diaChi": "1a",
+      "gia": "1",
+      "id": 7
+    }
+  ]
+}

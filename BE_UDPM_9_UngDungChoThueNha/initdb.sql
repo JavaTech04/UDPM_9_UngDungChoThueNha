@@ -1,4 +1,3 @@
--- Create 'user' table with default timestamps for 'created_at' and 'updated_at'
 CREATE TABLE user (
     id INT PRIMARY KEY AUTO_INCREMENT,
     username VARCHAR(50) NOT NULL UNIQUE,
@@ -8,7 +7,6 @@ CREATE TABLE user (
     updated_at TIMESTAMP
 );
 
--- Create 'home' table with 'user_id' column and foreign key constraint
 CREATE TABLE home (
     id BIGINT PRIMARY KEY AUTO_INCREMENT,
     address VARCHAR(255) NOT NULL,
@@ -29,8 +27,8 @@ INSERT INTO user (username, email, password) VALUES
 
 -- Insert sample data into 'home' table
 INSERT INTO home (address, price, quantity, image_url, user_id) VALUES
-('123 Main St, City A', 2500000, 3, 'home1.jpg', 1),
-('456 Maple Ave, City B', 3000000, 2, 'home2.jpg', 2),
-('789 Oak St, City C', 1500000, 5, 'home3.jpg', 3),
-('101 Pine St, City D', 4000000, 1, 'home4.jpg', 4),
-('202 Cedar Ave, City E', 2000000, 4, 'home5.jpg', 5);
+('Ha Noi 1', 2500000, 3, 'https://th.bing.com/th/id/OIP.xD3a4PqNGdW9NC3CHI82JgAAAA?rs=1&pid=ImgDetMain', 1),
+('Ha Noi 2', 3000000, 2, 'https://th.bing.com/th/id/R.38985e6da8945547bb31b9abf82f267e?rik=sBI6Ok9ockOCAw&pid=ImgRaw&r=0', 2),
+('Ha Noi 3', 1500000, 5, 'https://www.apartments.com/rental-manager/sites/default/files/image/2023-02/nine-steps-to-turn-your-home-into-a-rental-property_hero.jpg', 3),
+('Ha Noi 4', 4000000, 1, 'https://th.bing.com/th/id/OIP.AbY5n74K5jiRL0rhXHJ6lQHaFi?rs=1&pid=ImgDetMain', 4),
+('Ha Noi 5', 2000000, 4, 'https://a0.muscache.com/im/pictures/prohost-api/Hosting-964780713002684826/original/8a72be11-b95f-4370-945a-88b86897d5f4.jpeg?im_w=720&width=720&quality=70&auto=webp', 5);

@@ -6,5 +6,15 @@
  */
 package udpm9.be_udpm_9_ungdungchothuenha.services;
 
+import udpm9.be_udpm_9_ungdungchothuenha.dto.response.HomeResponse;
+
+import java.util.HashMap;
+import java.util.Set;
+
 public interface HomeService {
+    HashMap<Long, HomeResponse.Home> test();
+
+    Set<HomeResponse.Home> getAll();
+
+    HomeResponse.Home get(Long id);
 }

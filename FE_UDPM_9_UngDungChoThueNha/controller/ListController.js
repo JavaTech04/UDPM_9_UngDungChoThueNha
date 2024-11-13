@@ -1,9 +1,11 @@
 window.ListController = function($scope, $http){
-    const API = "http://localhost:3000/home";
+    const API = "http://localhost:8080/api/home";
     
     $scope.getData = function() {
         $http.get(API).then(function(response){
-            $scope.listHome = response.data;
+            console.log(response.data.data);
+            
+            $scope.listHome = response.data.data;
         })
     }
     $scope.getData();

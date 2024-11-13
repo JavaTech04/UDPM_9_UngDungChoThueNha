@@ -14,4 +14,5 @@ public class HomeRequest {
     private Integer quantity;
 
     private String imageUrl;
+
 }

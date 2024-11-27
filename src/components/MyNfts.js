@@ -11,7 +11,6 @@ const CreateProduct = ({ referenceId, collectionId, onSuccess }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState(null);
   const [uploadProgress, setUploadProgress] = useState(0);
-  console.log(1);
   
   const [formData, setFormData] = useState({
     name: '',

@@ -104,8 +104,6 @@ const MarketplaceHome = ({ referenceId }) => {
   const [selectedItem, setSelectedItem] = useState(null);
   const [buyLoading, setBuyLoading] = useState(false);
   const [buyError, setBuyError] = useState(null);
-
-  // Memoized filter function
   const filteredItems = useMemo(() => {
     return allItems.filter(itemData =>
       itemData.type === 'UniqueAsset' &&
@@ -113,8 +111,6 @@ const MarketplaceHome = ({ referenceId }) => {
       itemData.item.owner.referenceId !== referenceId
     );
   }, [allItems, referenceId]);
-
-  // Optimized fetch function with cancellation
   const fetchAllItems = useCallback(async (signal) => {
     setLoading(true);
     setError(null);
@@ -126,7 +122,6 @@ const MarketplaceHome = ({ referenceId }) => {
           params: {
             perPage: 100,
             page: page,
-            // collectionId: 'bbe92f30-9a6a-46ce-90c5-17fd1ad6e0dc',
             collectionId: '791f789f-dd74-41bd-b74e-f1ddf71727fd',
           },
           headers: {
@@ -172,7 +167,6 @@ const MarketplaceHome = ({ referenceId }) => {
     };
   }, [fetchAllItems]);
 
-  // Pagination hook
   const {
     currentItems,
     currentPage,
@@ -344,7 +338,7 @@ const MarketplaceHome = ({ referenceId }) => {
                         variant="outline-primary"
                         onClick={() => handleBuyItem(itemData.item)}
                       >
-                        Mua ngay
+                        Thuê ngay
                       </Button>
                     </div>
                   </Card.Body>
@@ -369,7 +363,7 @@ const MarketplaceHome = ({ referenceId }) => {
                 className="img-fluid mb-3 rounded"
                 style={{ maxHeight: '300px' }}
               />
-              <p>Bạn có chắc chắn muốn mua sản phẩm này?</p>
+              <p>Bạn có chắc chắn muốn thuê phòng này này?</p>
               <p className="fw-bold">
                 Giá: ${(selectedItem.priceCents / 100).toFixed(2)} USDC
               </p>

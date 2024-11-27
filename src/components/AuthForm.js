@@ -30,7 +30,7 @@ const AuthForm = ({ setIsLoggedIn, setUserData }) => {
     };
 
     checkPhantomWallet();
-    initializeDriverGuide();
+    // initializeDriverGuide();
   }, []);
 
   // Hàm khởi tạo hướng dẫn từng bước

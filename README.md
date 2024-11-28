@@ -16,7 +16,7 @@ SolanaUDPM là một dự án demo tích hợp các chức năng blockchain Sola
 ## 🌍 Live Website
 
 ```
-https://udpm-solana-11.netlify.app/
+https://solana-udpm-9.netlify.app/
 ```
 
 ## 🌟 Tính Năng
@@ -32,7 +32,7 @@ https://udpm-solana-11.netlify.app/
 
 1. Clone repository:
    ```sh
-   git clone https://github.com/leonx04/SolanaUDPM.git
+   git clone https://github.com/JavaTech04/UDPM_9_UngDungChoThueNha.git
    cd solana-demo
    ```
 

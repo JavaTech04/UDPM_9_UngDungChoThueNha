@@ -33,7 +33,7 @@ https://solana-udpm-9.netlify.app/
 1. Clone repository:
    ```sh
    git clone https://github.com/JavaTech04/UDPM_9_UngDungChoThueNha.git
-   cd solana-demo
+   cd UDPM_9_UngDungChoThueNha
    ```
 
 2. Cài đặt các gói cần thiết:

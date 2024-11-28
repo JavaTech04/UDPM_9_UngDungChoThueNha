@@ -1,8 +1,10 @@
-import axios from "axios";
-import "driver.js/dist/driver.css";
+// Author: Nong Hoang Vu || JavaTech
+// Facebook:https://facebook.com/NongHoangVu04
+// Github: https://github.com/JavaTech04
+// Youtube: https://www.youtube.com/@javatech04/?sub_confirmation=1
 import React, { useEffect, useState } from "react";
-import { apiKey } from "../api";
-import unidecode from "unidecode";
+import { useForm } from "react-hook-form";
+import axios from "axios";
 import {
   Box,
   Button,
@@ -10,22 +12,24 @@ import {
   Typography,
   FormControl,
   FormLabel,
+  FormHelperText,
 } from "@mui/joy";
 import { toast } from "react-toastify";
 import { AccountCircle, Email } from "@mui/icons-material";
+import { apiKey } from "../api";
 
 const apiBaseUrl = "https://api.gameshift.dev/nx/users";
 
 const AuthForm = ({ setIsLoggedIn, setUserData }) => {
-  const [formData, setFormData] = useState({
-    referenceId: "",
-    email: "",
-    externalWalletAddress: "",
-  });
-
   const [isRegistering, setIsRegistering] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isPhantomInstalled, setIsPhantomInstalled] = useState(false);
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
 
   useEffect(() => {
     const checkPhantomWallet = () => {
@@ -51,44 +55,15 @@ const AuthForm = ({ setIsLoggedIn, setUserData }) => {
     }
   };
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    const updatedValue = unidecode(value);
-
-    setFormData((prev) => ({
-      ...prev,
-      [name]: updatedValue,
-    }));
-  };
-
-  const validateForm = () => {
-    if (!formData.referenceId || !formData.email) {
-      toast.error("Vui lòng nhập đầy đủ thông tin.");
-      return false;
-    }
-    if (!formData.email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
-      toast.error("Email không hợp lệ.");
-      return false;
-    }
-    return true;
-  };
-
-  const handleAction = async (isRegister) => {
-    if (!validateForm()) return;
-
+  const onSubmit = async (data) => {
     setIsLoading(true);
     try {
-      if (isRegister) {
+      if (isRegistering) {
         const walletAddress = await connectPhantomWallet();
         if (!walletAddress) {
           setIsLoading(false);
           return;
         }
-
-        setFormData((prev) => ({
-          ...prev,
-          externalWalletAddress: walletAddress,
-        }));
 
         const config = {
           headers: {
@@ -101,8 +76,8 @@ const AuthForm = ({ setIsLoggedIn, setUserData }) => {
         await axios.post(
           apiBaseUrl,
           {
-            referenceId: formData.referenceId,
-            email: formData.email,
+            referenceId: data.referenceId,
+            email: data.email,
             externalWalletAddress: walletAddress,
           },
           config
@@ -118,12 +93,12 @@ const AuthForm = ({ setIsLoggedIn, setUserData }) => {
         };
 
         const response = await axios.get(
-          `${apiBaseUrl}/${formData.referenceId}`,
+          `${apiBaseUrl}/${data.referenceId}`,
           config
         );
 
-        if (response.data.email !== formData.email) {
-          toast.error("Email không khớp");
+        if (response.data.email !== data.email) {
+          toast.error("Email không hợp lệ");
           return;
         }
 
@@ -131,11 +106,11 @@ const AuthForm = ({ setIsLoggedIn, setUserData }) => {
       }
 
       setTimeout(() => {
-        setUserData(formData);
+        setUserData(data);
         setIsLoggedIn(true);
       }, 1500);
-    } catch (err) {
-      toast.error("Đã xảy ra lỗi. Vui lòng thử lại sau.");
+    } catch (e) {
+      toast.error(e?.response?.data?.message);
     } finally {
       setIsLoading(false);
     }
@@ -147,11 +122,13 @@ const AuthForm = ({ setIsLoggedIn, setUserData }) => {
         display: "flex",
         height: "100vh",
         backgroundImage:
-          'url("https://kinsta.com/wp-content/uploads/2019/12/wordpress-rest-api.jpg")',
+          'url("https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExMHhxNHA5dmVhZWlpaHJiNHF5Y2t5enIwZzdrOXVrN28xdWVoMHd0aCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/doXBzUFJRxpaUbuaqz/giphy.webp")',
         backgroundSize: "cover",
         backgroundPosition: "center",
+        backdropFilter: "blur(5px)",
       }}
     >
+      {/* Left Section: Title and Description */}
       <Box
         sx={{
           flex: 1,
@@ -159,7 +136,7 @@ const AuthForm = ({ setIsLoggedIn, setUserData }) => {
           flexDirection: "column",
           justifyContent: "center",
           alignItems: "flex-start",
-          p: 5,
+          padding: 5,
           color: "white",
           backdropFilter: "blur(5px)",
         }}
@@ -173,7 +150,7 @@ const AuthForm = ({ setIsLoggedIn, setUserData }) => {
             textShadow: "2px 2px 4px rgba(0,0,0,0.6)",
           }}
         >
-          Ứng dụng Quản lý Thuê Nhà
+          Ứng dụng cho thuê nhà dựa trên NFT
         </Typography>
         <Typography
           level="body1"
@@ -189,7 +166,7 @@ const AuthForm = ({ setIsLoggedIn, setUserData }) => {
         </Typography>
       </Box>
 
-      {/* Right Section */}
+      {/* Right Section: Login/Register Form */}
       <Box
         sx={{
           flex: 1,
@@ -217,10 +194,10 @@ const AuthForm = ({ setIsLoggedIn, setUserData }) => {
             mb={2}
             sx={{ color: "white" }}
           >
-            {isRegistering ? "ĐĂNG kÝ" : "ĐĂNG NHẬP"}
+            {isRegistering ? "ĐĂNG KÝ" : "ĐĂNG NHẬP"}
           </Typography>
-          <form>
-            <FormControl sx={{ mb: 3 }}>
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <FormControl sx={{ mb: 3 }} error={!!errors.referenceId}>
               <FormLabel sx={{ color: "rgba(255, 255, 255, 0.8)" }}>
                 <AccountCircle
                   sx={{
@@ -232,10 +209,14 @@ const AuthForm = ({ setIsLoggedIn, setUserData }) => {
                 Tên tài khoản
               </FormLabel>
               <Input
-                name="referenceId"
-                value={formData.referenceId}
-                onChange={handleInputChange}
-                placeholder="Nhập mã tham chiếu"
+                {...register("referenceId", {
+                  required: "Tên tài khoản là bắt buộc.",
+                  minLength: {
+                    value: 3,
+                    message: "Tên tài khoản phải có ít nhất 3 ký tự.",
+                  },
+                })}
+                placeholder="Tên tài khoản"
                 disabled={isLoading}
                 sx={{
                   bgcolor: "rgba(255,255,255,0.1)",
@@ -243,8 +224,11 @@ const AuthForm = ({ setIsLoggedIn, setUserData }) => {
                   "::placeholder": { color: "rgba(255,255,255,0.6)" },
                 }}
               />
+              {errors.referenceId && (
+                <FormHelperText>{errors.referenceId.message}</FormHelperText>
+              )}
             </FormControl>
-            <FormControl sx={{ mb: 3 }}>
+            <FormControl sx={{ mb: 3 }} error={!!errors.email}>
               <FormLabel sx={{ color: "rgba(255, 255, 255, 0.8)" }}>
                 <Email
                   sx={{
@@ -256,10 +240,13 @@ const AuthForm = ({ setIsLoggedIn, setUserData }) => {
                 Email
               </FormLabel>
               <Input
-                name="email"
-                type="email"
-                value={formData.email}
-                onChange={handleInputChange}
+                {...register("email", {
+                  required: "Email là bắt buộc.",
+                  pattern: {
+                    value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                    message: "Email không hợp lệ.",
+                  },
+                })}
                 placeholder="Nhập email"
                 disabled={isLoading}
                 sx={{
@@ -268,23 +255,15 @@ const AuthForm = ({ setIsLoggedIn, setUserData }) => {
                   "::placeholder": { color: "rgba(255,255,255,0.6)" },
                 }}
               />
+              {errors.email && (
+                <FormHelperText>{errors.email.message}</FormHelperText>
+              )}
             </FormControl>
-            {isRegistering && !isPhantomInstalled && (
-              <Box
-                sx={{
-                  marginTop: 2,
-                  textAlign: "center",
-                  color: "warning.main",
-                }}
-              >
-                Vui lòng cài đặt Phantom Wallet để đăng ký
-              </Box>
-            )}
             <Button
               variant="solid"
               fullWidth
+              type="submit"
               color={isRegistering ? "dark" : "primary"}
-              onClick={() => handleAction(isRegistering)}
               disabled={isLoading || (isRegistering && !isPhantomInstalled)}
               sx={{
                 background: isRegistering

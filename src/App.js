@@ -3,22 +3,41 @@ import {
   clusterApiUrl,
   Connection,
   LAMPORTS_PER_SOL,
-  PublicKey
-} from '@solana/web3.js';
-import 'bootstrap-icons/font/bootstrap-icons.css';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { Button, Dropdown } from 'react-bootstrap';
-import { Navigate, NavLink, Route, BrowserRouter as Router, Routes } from "react-router-dom";
-import './App.css';
+  PublicKey,
+} from "@solana/web3.js";
+import "bootstrap-icons/font/bootstrap-icons.css";
+import "bootstrap/dist/css/bootstrap.min.css";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
+import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
+import {
+  Navigate,
+  NavLink,
+  Route,
+  BrowserRouter as Router,
+  Routes,
+} from "react-router-dom";
+import "./App.css";
+import logo from "./sol.png";
 import AuthForm from "./components/AuthForm";
 import Home from "./components/Home";
 import MyNfts from "./components/MyNfts";
 import User from "./components/User";
-
+import AccountBalanceWalletOutlinedIcon from "@mui/icons-material/AccountBalanceWalletOutlined";
+import {
+  Avatar,
+  Box,
+  IconButton,
+  Typography,
+  Button,
+  Divider,
+  MenuItem,
+  Menu,
+} from "@mui/joy";
 
 // Địa chỉ token USDC chính thức trên Solana devnet
-const USDC_MINT_ADDRESS = new PublicKey('4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU');
+const USDC_MINT_ADDRESS = new PublicKey(
+  "4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU"
+);
 
 function App() {
   const isPhantomInstalled = window.phantom?.solana?.isPhantom;
@@ -27,18 +46,33 @@ function App() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
 
+  const [anchorEl, setAnchorEl] = useState(null);
+
+  const handleMouseEnter = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleMouseLeave = () => {
+    setAnchorEl(null);
+  };
+
   // Theme state
   const [theme, setTheme] = useState(() => {
-    const savedTheme = localStorage.getItem('app-theme');
+    const savedTheme = localStorage.getItem("app-theme");
     if (savedTheme) return savedTheme;
 
-    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    return window.matchMedia("(prefers-color-scheme: dark)").matches
+      ? "dark"
+      : "light";
   });
 
   // Solana connection using useMemo inside the component
-  const connection = useMemo(() => new Connection(clusterApiUrl('devnet'), 'confirmed'), []);
+  const connection = useMemo(
+    () => new Connection(clusterApiUrl("devnet"), "confirmed"),
+    []
+  );
 
-  // Wallet state 
+  // Wallet state
   const [walletAddress, setWalletAddress] = useState(null);
   const [walletBalance, setWalletBalance] = useState(0);
   const [usdcBalance, setUsdcBalance] = useState(null);
@@ -48,61 +82,64 @@ function App() {
   // Hàm lấy số dư USDC
   const getUsdcBalance = async (connection, walletPublicKey) => {
     try {
+      // Chuyển đổi PublicKey nếu cần
+      const publicKey =
+        typeof walletPublicKey === "string"
+          ? new PublicKey(walletPublicKey)
+          : walletPublicKey;
+
       const tokenAccounts = await connection.getParsedTokenAccountsByOwner(
-        walletPublicKey,
+        publicKey,
         { programId: TOKEN_PROGRAM_ID }
       );
 
       const usdcAccount = tokenAccounts.value.find(
-        (account) => account.account.data.parsed.info.mint === USDC_MINT_ADDRESS.toBase58()
+        (account) =>
+          account.account.data.parsed.info.mint === USDC_MINT_ADDRESS.toBase58()
       );
 
       if (usdcAccount) {
-        const usdcBalance = usdcAccount.account.data.parsed.info.tokenAmount.uiAmount;
-        return usdcBalance;
+        const usdcBalance =
+          usdcAccount.account.data.parsed.info.tokenAmount.uiAmount;
+        return usdcBalance || 0;
       }
 
-      return 0; // Không tìm thấy số dư, trả về 0
+      return 0; // Không tìm thấy tài khoản USDC
     } catch (error) {
-      console.error('Lỗi khi lấy số dư USDC:', error);
-      return 0; // Nếu có lỗi, trả về 0
+      console.error("Lỗi khi lấy số dư USDC:", error);
+      return 0;
     }
   };
-
-
   // Hàm fetch số dư USDC
   const fetchUsdcBalance = useCallback(async () => {
     if (walletAddress) {
       try {
-        const publicKey = new PublicKey(walletAddress);
-        const balance = await getUsdcBalance(connection, publicKey);
-
-        // Kiểm tra nếu balance là null hoặc NaN
-        if (balance !== null && !isNaN(balance)) {
-          setUsdcBalance(balance);  // Cập nhật số dư USDC nếu có
-        } else {
-          setUsdcBalance(0);  // Nếu không có số dư, hiển thị là 0
-        }
+        const balance = await getUsdcBalance(connection, walletAddress);
+        setUsdcBalance(balance);
       } catch (error) {
-        console.error('Lỗi khi lấy số dư USDC:', error);
-        setUsdcBalance(0);  // Trường hợp có lỗi, hiển thị số dư là 0
+        console.error("Lỗi khi lấy số dư USDC:", error);
+        setUsdcBalance(0);
       }
     }
   }, [walletAddress, connection]);
 
-
-
   // Theo dõi theme và áp dụng class
   useEffect(() => {
-    document.body.classList.remove('light-theme', 'dark-theme');
+    document.body.classList.remove("light-theme", "dark-theme");
     document.body.classList.add(`${theme}-theme`);
   }, [theme]);
 
+  useEffect(() => {
+    if (walletAddress) {
+      fetchUsdcBalance();
+    }
+  }, [walletAddress, fetchUsdcBalance]);
+
   // Hàm thay đổi theme
   const toggleTheme = () => {
-    const newTheme = theme === 'light' ? 'dark' : 'light';
+    const newTheme = theme === "light" ? "dark" : "light";
     setTheme(newTheme);
-    localStorage.setItem('app-theme', newTheme);
+    localStorage.setItem("app-theme", newTheme);
   };
 
   useEffect(() => {
@@ -117,36 +154,36 @@ function App() {
     };
 
     handleResize(); // Initial check
-    window.addEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
 
     // Phantom Wallet connection status listeners
     const provider = window.phantom?.solana;
 
     if (provider) {
       const handleConnect = async (publicKey) => {
-        console.log('Connected to wallet:', publicKey.toBase58());
+        console.log("Connected to wallet:", publicKey.toBase58());
         await fetchUsdcBalance();
       };
 
       const handleDisconnect = () => {
-        console.log('Disconnected from wallet');
+        console.log("Disconnected from wallet");
         setWalletAddress(null);
         setWalletBalance(0);
         setUsdcBalance(null);
       };
 
-      provider.on('connect', handleConnect);
-      provider.on('disconnect', handleDisconnect);
+      provider.on("connect", handleConnect);
+      provider.on("disconnect", handleDisconnect);
 
       // Cleanup listeners and resize event
       return () => {
-        window.removeEventListener('resize', handleResize);
-        provider.removeListener('connect', handleConnect);
-        provider.removeListener('disconnect', handleDisconnect);
+        window.removeEventListener("resize", handleResize);
+        provider.removeListener("connect", handleConnect);
+        provider.removeListener("disconnect", handleDisconnect);
       };
     }
 
-    return () => window.removeEventListener('resize', handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, [fetchUsdcBalance]);
 
   const toggleSidebar = () => {
@@ -189,7 +226,6 @@ function App() {
 
       // Lấy số dư USDC
       await fetchUsdcBalance();
-
     } catch (err) {
       console.error("Lỗi khi kết nối ví:", err);
 
@@ -198,7 +234,9 @@ function App() {
         // User rejected the request
         setWalletError("Kết nối ví bị từ chối. Vui lòng thử lại.");
       } else {
-        setWalletError(err.message || "Không thể kết nối ví. Vui lòng thử lại.");
+        setWalletError(
+          err.message || "Không thể kết nối ví. Vui lòng thử lại."
+        );
       }
     } finally {
       setWalletLoading(false);
@@ -251,12 +289,24 @@ function App() {
             )}
 
             {/* Sidebar */}
-            <div className={`sidebar ${!isSidebarOpen ? 'closed' : ''}`}>
+            <div className={`sidebar ${!isSidebarOpen ? "closed" : ""}`}>
               <div className="sidebar-header">
-                <h3 className="mb-0 p-3 text-white">
-                  <i className="bi bi-palette me-2"></i>
-                  UDPM 9
-                </h3>
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "start",
+                    alignItems: "center",
+                  }}
+                >
+                  <Avatar alt="Logo UDPM 9" src={logo} />
+                  <Typography
+                    sx={{ color: "#fff", marginLeft: 1 }}
+                    level="title-lg"
+                    variant="plain"
+                  >
+                    SOLANA UDPM 9
+                  </Typography>
+                </Box>
                 {isMobile && (
                   <button
                     className="btn btn-link close-sidebar"
@@ -272,16 +322,18 @@ function App() {
                   <NavLink
                     to="/home"
                     className={({ isActive }) =>
-                      `nav-link ${isActive ? 'active' : ''}`}
+                      `nav-link ${isActive ? "active" : ""}`
+                    }
                     onClick={closeSidebarOnMobile}
                   >
-                    <i className="bi bi-house-door me-2"></i>
+                    <HomeOutlinedIcon />
                     Trang chủ
                   </NavLink>
                   <NavLink
                     to="/my-nfts"
                     className={({ isActive }) =>
-                      `nav-link ${isActive ? 'active' : ''}`}
+                      `nav-link ${isActive ? "active" : ""}`
+                    }
                     onClick={closeSidebarOnMobile}
                   >
                     <i className="bi bi-collection me-2"></i>
@@ -291,116 +343,195 @@ function App() {
               </div>
 
               <div className="sidebar-footer">
-                <div className={`wallet-status ${isPhantomInstalled ? 'text-success' : 'text-warning'}`}>
+                <div
+                  className={`wallet-status ${
+                    isPhantomInstalled ? "text-success" : "text-warning"
+                  }`}
+                >
                   <i className={`bi bi-circle-fill me-2`}></i>
-                  <span className="text-white">{isPhantomInstalled ? 'Phantom đã cài đặt' : 'Phantom chưa cài đặt'}</span>
+                  <span className="text-white">
+                    {isPhantomInstalled
+                      ? "Phantom đã cài đặt"
+                      : "Phantom chưa cài đặt"}
+                  </span>
                 </div>
               </div>
             </div>
 
             {/* Main Content */}
-            <div className={`main-content ${!isSidebarOpen ? 'expanded' : ''}`}>
+            <div className={`main-content ${!isSidebarOpen ? "expanded" : ""}`}>
               {/* Top Navigation */}
-              <nav className="top-nav">
-                <div className="d-flex align-items-center w-100">
-                  <button
-                    className="btn btn-link menu-toggle"
+              <nav>
+                <Box
+                  display="flex"
+                  alignItems="center"
+                  width="100%"
+                  sx={{ padding: "0 16px" }}
+                >
+                  {/* Sidebar Toggle Button */}
+                  <IconButton
                     onClick={toggleSidebar}
+                    sx={{ color: "text.primary" }}
                   >
                     <i className="bi bi-list fs-4"></i>
-                  </button>
+                  </IconButton>
 
                   {/* Theme Toggle Button */}
-                  <button
-                    className="btn btn-link theme-toggle ms-3"
+                  <IconButton
                     onClick={toggleTheme}
+                    sx={{ marginLeft: "auto", color: "text.primary" }}
                     title="Chuyển chế độ giao diện"
                   >
-                    {theme === 'light' ? (
+                    {theme === "light" ? (
                       <i className="bi bi-moon-stars text-dark"></i>
                     ) : (
                       <i className="bi bi-brightness-high text-warning"></i>
                     )}
-                  </button>
+                  </IconButton>
 
-                  {/* Wallet Connection Container */}
-                  <div className="wallet-connection-container d-flex align-items-center ms-3">
+                  {/* Wallet Display */}
+                  <Box ml={2} display="flex" alignItems="center">
                     {!walletAddress ? (
                       <Button
-                        variant="outline-primary"
+                        startDecorator={<AccountBalanceWalletOutlinedIcon />}
+                        variant="plain"
+                        size="sm"
+                        color="neutral"
                         onClick={connectWallet}
                         disabled={walletLoading}
                       >
                         {walletLoading ? (
                           <>
-                            <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                            <span
+                              className="spinner-border spinner-border-sm me-2"
+                              role="status"
+                              aria-hidden="true"
+                            ></span>
                             Đang kết nối...
                           </>
                         ) : (
-                          'Connect Phantom'
+                          "Kết Nối Phantom"
                         )}
                       </Button>
                     ) : (
-                      <div className="d-flex flex-column">
-                        <div className="d-flex align-items-center">
-                          <span className="me-2 text-muted">
-                            SOL:
-                            <span className="fw-bold text-dark ms-1">
-                              {walletBalance.toFixed(2)} SOL
-                            </span>
-                          </span>
-                          <span className="me-2 text-muted">
-                            USDC:
-                            <span className="fw-bold text-dark ms-1">
-                              {usdcBalance !== null ? usdcBalance.toFixed(2) : 'Đang tải...'} USDC
-                            </span>
-                          </span>
-                          <Button
-                            variant="outline-danger"
-                            size="sm"
-                            onClick={disconnectWallet}
-                            className="ms-2"
-                          >
-                            Stop
-                          </Button>
-                        </div>
-                      </div>
-                    )}
+                      <Box display="flex" alignItems="center">
+                        <Typography
+                          variant="body2"
+                          color="text.secondary"
+                          sx={{ marginRight: 2 }}
+                        >
+                          SOL:
+                        </Typography>
+                        <Typography
+                          variant="body2"
+                          color="text.primary"
+                          sx={{ fontWeight: "bold", marginRight: 2 }}
+                        >
+                          {walletBalance.toFixed(2)} SOL
+                        </Typography>
 
+                        <Typography
+                          variant="body2"
+                          color="text.secondary"
+                          sx={{ marginRight: 2 }}
+                        >
+                          USDC:
+                        </Typography>
+                        <Typography
+                          variant="body2"
+                          color="text.primary"
+                          sx={{ fontWeight: "bold", marginRight: 2 }}
+                        >
+                          {usdcBalance !== null
+                            ? usdcBalance.toFixed(2)
+                            : "Đang tải..."}{" "}
+                          USDC
+                        </Typography>
+
+                        <Button
+                          variant="outlined"
+                          color="primary"
+                          size="small"
+                          onClick={disconnectWallet}
+                          sx={{
+                            borderColor: "primary.main",
+                            color: "primary.main",
+                            "&:hover": {
+                              backgroundColor: "primary.main",
+                              color: "white",
+                            },
+                          }}
+                        >
+                          Dừng
+                        </Button>
+                      </Box>
+                    )}
                     {walletError && (
-                      <div className="alert alert-danger mt-2 mb-0 py-1 px-2" role="alert">
-                        {walletError}
-                      </div>
+                      <Box sx={{ mt: 1 }}>
+                        <Typography variant="body2" color="error">
+                          {walletError}
+                        </Typography>
+                      </Box>
                     )}
-                  </div>
-                </div>
+                  </Box>
 
-                <Dropdown className="user-dropdown">
-                  <Dropdown.Toggle
-                    variant="link"
-                    id="user-dropdown"
-                    className="theme-text d-flex align-items-center text-decoration-none"
-                  >
-                    <i className="bi bi-person-circle me-2"></i>
-                    {userData?.email}
-                  </Dropdown.Toggle>
+                  {/* User Dropdown */}
+                  <Box marginLeft={3}>
+                    {/* User Profile Dropdown */}
+                    <IconButton
+                      onMouseEnter={handleMouseEnter}
+                      onMouseLeave={handleMouseLeave}
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        textDecoration: "none",
+                        color: "text.primary",
+                      }}
+                    >
+                      <Avatar alt="User Avatar" src={logo} />
+                    </IconButton>
 
-                  <Dropdown.Menu>
-                    <Dropdown.Divider />
-                    <Dropdown.Item onClick={handleLogout} className="text-danger">
-                      <i className="bi bi-box-arrow-right me-2"></i>
-                      Đăng xuất
-                    </Dropdown.Item>
-                  </Dropdown.Menu>
-                </Dropdown>
+                    <Menu
+                      anchorEl={anchorEl}
+                      open={Boolean(anchorEl)}
+                      onClose={handleMouseLeave}
+                      sx={{ minWidth: 150 }}
+                      onMouseLeave={handleMouseLeave}
+                    >
+                      <MenuItem>
+                        <Typography variant="body2">
+                          User: {userData?.referenceId}
+                        </Typography>
+                      </MenuItem>
+                      <Divider />
+                      <MenuItem
+                        onClick={handleLogout}
+                        sx={{ color: "danger.main", fontSize: "14px" }}
+                      >
+                        Đăng xuất
+                      </MenuItem>
+                    </Menu>
+                  </Box>
+                </Box>
               </nav>
 
               {/* Main Content Area */}
               <div className="content-area">
                 <Routes>
                   <Route path="/" element={<Navigate to="/home" replace />} />
-                  <Route path="/home" element={<Home referenceId={userData?.referenceId} />} />
-                  <Route path="/my-nfts" element={<MyNfts referenceId={userData?.referenceId} />} />
+                  <Route
+                    path="/home"
+                    element={<Home referenceId={userData?.referenceId} />}
+                  />
+                  <Route
+                    path="/my-nfts"
+                    element={
+                      <MyNfts
+                        referenceId={userData?.referenceId}
+                        collectionId="ea9d4055-6d86-40f4-b58e-f652d8489328"
+                      />
+                    }
+                  />
                   <Route
                     path="/user"
                     element={

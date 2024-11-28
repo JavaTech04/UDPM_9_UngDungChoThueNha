@@ -14,7 +14,7 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
-const analytics = getAnalytics(app); // Đảm bảo Analytics đã được khởi tạo đúng
+const analytics = getAnalytics(app);
 
 export const googleSignIn = async () => {
   const provider = new GoogleAuthProvider();

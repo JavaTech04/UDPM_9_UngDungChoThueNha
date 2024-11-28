@@ -228,7 +228,6 @@
 //     }
 //   };
 
-
 //   // Render loading state
 //   if (loading) {
 //     return (
@@ -438,18 +437,17 @@
 
 // export default MarketplaceHome;
 
-
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
-import axios from 'axios';
-import { Alert, Button, Card, Form, Modal, Spinner } from 'react-bootstrap';
-import { apiKey } from '../api';
+import React, { useState, useEffect, useCallback, useMemo } from "react";
+import axios from "axios";
+import { Alert, Button, Card, Form, Modal, Spinner } from "react-bootstrap";
+import { apiKey } from "../api";
 
 const usePagination = (items, initialPerPage = 10) => {
   const [pagination, setPagination] = useState({
     currentPage: 1,
     perPage: initialPerPage,
     totalPages: 0,
-    totalResults: 0
+    totalResults: 0,
   });
 
   const paginatedItems = useMemo(() => {
@@ -459,22 +457,22 @@ const usePagination = (items, initialPerPage = 10) => {
     return {
       currentItems: items.slice(startIndex, endIndex),
       totalPages: Math.ceil(items.length / pagination.perPage),
-      totalResults: items.length
+      totalResults: items.length,
     };
   }, [items, pagination.currentPage, pagination.perPage]);
 
   const changePage = useCallback((newPage) => {
-    setPagination(prev => ({
+    setPagination((prev) => ({
       ...prev,
-      currentPage: newPage
+      currentPage: newPage,
     }));
   }, []);
 
   const changePerPage = useCallback((newPerPage) => {
-    setPagination(prev => ({
+    setPagination((prev) => ({
       ...prev,
       perPage: newPerPage,
-      currentPage: 1
+      currentPage: 1,
     }));
   }, []);
 
@@ -484,7 +482,7 @@ const usePagination = (items, initialPerPage = 10) => {
     totalPages: paginatedItems.totalPages,
     totalResults: paginatedItems.totalResults,
     changePage,
-    changePerPage
+    changePerPage,
   };
 };
 
@@ -494,7 +492,7 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
   return (
     <nav>
       <ul className="pagination mb-0">
-        {['Đầu', 'Trước', 'Tiếp', 'Cuối'].map((label, index) => {
+        {["Đầu", "Trước", "Tiếp", "Cuối"].map((label, index) => {
           const isStart = index === 0;
           const isBack = index === 1;
           const isNext = index === 2;
@@ -504,21 +502,23 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
             ((isStart || isBack) && currentPage === 1) ||
             ((isNext || isEnd) && currentPage === totalPages);
 
-          const pageToGo =
-            isStart ? 1 :
-              isBack ? currentPage - 1 :
-                isNext ? currentPage + 1 :
-                  totalPages;
+          const pageToGo = isStart
+            ? 1
+            : isBack
+            ? currentPage - 1
+            : isNext
+            ? currentPage + 1
+            : totalPages;
 
           return (
             <li
               key={label}
-              className={`page-item ${isDisabled ? 'disabled' : ''}`}
+              className={`page-item ${isDisabled ? "disabled" : ""}`}
             >
               <Button
                 variant="outline-secondary"
                 size="sm"
-                className={index > 0 ? 'ms-2' : ''}
+                className={index > 0 ? "ms-2" : ""}
                 onClick={() => onPageChange(pageToGo)}
                 disabled={isDisabled}
               >
@@ -547,10 +547,11 @@ const MarketplaceHome = ({ referenceId }) => {
 
   // Memoized filter function
   const filteredItems = useMemo(() => {
-    return allItems.filter(itemData =>
-      itemData.type === 'UniqueAsset' &&
-      itemData.item.priceCents !== null &&
-      itemData.item.owner.referenceId !== referenceId
+    return allItems.filter(
+      (itemData) =>
+        itemData.type === "UniqueAsset" &&
+        itemData.item.priceCents !== null &&
+        itemData.item.owner.referenceId !== referenceId
     );
   }, [allItems, referenceId]);
 
@@ -561,16 +562,16 @@ const MarketplaceHome = ({ referenceId }) => {
 
     try {
       const fetchPage = async (page) => {
-        const response = await axios.get('https://api.gameshift.dev/nx/items', {
+        const response = await axios.get("https://api.gameshift.dev/nx/items", {
           signal,
           params: {
             perPage: 100,
             page: page,
-            collectionId: '791f789f-dd74-41bd-b74e-f1ddf71727fd',
+            collectionId: "791f789f-dd74-41bd-b74e-f1ddf71727fd",
           },
           headers: {
-            accept: 'application/json',
-            'x-api-key': apiKey,
+            accept: "application/json",
+            "x-api-key": apiKey,
           },
         });
         return response.data;
@@ -590,10 +591,10 @@ const MarketplaceHome = ({ referenceId }) => {
       setAllItems(allFetchedItems);
     } catch (err) {
       if (axios.isCancel(err)) {
-        console.log('Request canceled', err.message);
+        console.log("Request canceled", err.message);
       } else {
-        setError('Không thể tải danh sách sản phẩm: ' + err.message);
-        console.error('Fetch error:', err);
+        setError("Không thể tải danh sách sản phẩm: " + err.message);
+        console.error("Fetch error:", err);
       }
     } finally {
       setLoading(false);
@@ -618,7 +619,7 @@ const MarketplaceHome = ({ referenceId }) => {
     totalResults,
     perPage,
     changePage,
-    changePerPage
+    changePerPage,
   } = usePagination(filteredItems);
 
   // Buy item handler
@@ -641,34 +642,34 @@ const MarketplaceHome = ({ referenceId }) => {
       const response = await axios.post(
         `https://api.gameshift.dev/nx/unique-assets/${selectedItem.id}/buy`,
         {
-          buyerId: referenceId
+          buyerId: referenceId,
         },
         {
           headers: {
-            'accept': 'application/json',
-            'content-type': 'application/json',
-            'x-api-key': apiKey
-          }
+            accept: "application/json",
+            "content-type": "application/json",
+            "x-api-key": apiKey,
+          },
         }
       );
 
       // Bỏ qua transactionId, chỉ sử dụng consentUrl
       const { consentUrl } = response.data;
-      window.open(consentUrl, '_blank');
+      window.open(consentUrl, "_blank");
       fetchAllItems();
     } catch (err) {
-      console.error('Lỗi mua sản phẩm:', err);
+      console.error("Lỗi mua sản phẩm:", err);
 
-      const errorMessage = err.response?.data?.message ||
+      const errorMessage =
+        err.response?.data?.message ||
         err.message ||
-        'Không thể thực hiện giao dịch. Vui lòng thử lại.';
+        "Không thể thực hiện giao dịch. Vui lòng thử lại.";
 
       setBuyError(errorMessage);
     } finally {
       setBuyLoading(false);
     }
   };
-
 
   // Render loading state
   if (loading) {
@@ -700,10 +701,7 @@ const MarketplaceHome = ({ referenceId }) => {
     return (
       <div className="container text-center py-5">
         <h2 className="text-muted">Hiện tại chưa có sản phẩm nào để mua</h2>
-        <Button
-          variant="primary"
-          onClick={() => fetchAllItems()}
-        >
+        <Button variant="primary" onClick={() => fetchAllItems()}>
           Tải lại
         </Button>
       </div>
@@ -725,7 +723,7 @@ const MarketplaceHome = ({ referenceId }) => {
             </span>
             <Form.Select
               size="sm"
-              style={{ width: 'auto' }}
+              style={{ width: "auto" }}
               value={perPage}
               onChange={(e) => changePerPage(Number(e.target.value))}
             >
@@ -753,14 +751,14 @@ const MarketplaceHome = ({ referenceId }) => {
                 <Card className="h-100 d-flex flex-column shadow-sm hover-lift">
                   <Card.Img
                     variant="top"
-                    src={item.imageUrl || '/default-image.jpg'}
-                    alt={item.name || 'Hình ảnh sản phẩm'}
+                    src={item.imageUrl || "/default-image.jpg"}
+                    alt={item.name || "Hình ảnh sản phẩm"}
                     className="card-img-top"
                     style={{
-                      width: '100%',
-                      height: 'auto',
-                      aspectRatio: '16/9',
-                      objectFit: 'cover',
+                      width: "100%",
+                      height: "auto",
+                      aspectRatio: "16/9",
+                      objectFit: "cover",
                     }}
                   />
                   <Card.Body style={{ flex: 1 }}>
@@ -793,7 +791,11 @@ const MarketplaceHome = ({ referenceId }) => {
       {/* Purchase Confirmation Modal */}
       {/* Purchase Confirmation Modal */}
       {selectedItem && (
-        <Modal show={!!selectedItem} onHide={() => setSelectedItem(null)} size="lg">
+        <Modal
+          show={!!selectedItem}
+          onHide={() => setSelectedItem(null)}
+          size="lg"
+        >
           <Modal.Header closeButton>
             <Modal.Title>Xác nhận mua {selectedItem.name}</Modal.Title>
           </Modal.Header>
@@ -804,7 +806,11 @@ const MarketplaceHome = ({ referenceId }) => {
                   src={selectedItem.imageUrl}
                   alt={selectedItem.name}
                   className="img-fluid mb-3 rounded"
-                  style={{ maxHeight: '300px', width: '100%', objectFit: 'cover' }}
+                  style={{
+                    maxHeight: "300px",
+                    width: "100%",
+                    objectFit: "cover",
+                  }}
                 />
               </div>
               <div className="col-md-6">
@@ -815,27 +821,35 @@ const MarketplaceHome = ({ referenceId }) => {
                       <strong>Tên:</strong> {selectedItem.name}
                     </p>
                     <p className="card-text">
-                      <strong>Mô tả:</strong> {selectedItem.description || 'Không có mô tả'}
+                      <strong>Mô tả:</strong>{" "}
+                      {selectedItem.description || "Không có mô tả"}
                     </p>
                     <p className="card-text">
-                      <strong>Giá:</strong> ${(selectedItem.priceCents / 100).toFixed(2)} USDC
+                      <strong>Giá:</strong> $
+                      {(selectedItem.priceCents / 100).toFixed(2)} USDC
                     </p>
                   </div>
                 </div>
 
-                {selectedItem.attributes && selectedItem.attributes.length > 0 && (
-                  <div className="card">
-                    <div className="card-header">Thuộc tính</div>
-                    <ul className="list-group list-group-flush">
-                      {selectedItem.attributes.map((attr, index) => (
-                        <li key={index} className="list-group-item d-flex justify-content-between align-items-center">
-                          <span className="text-muted">{attr.traitType}</span>
-                          <span className="badge bg-primary rounded-pill">{attr.value}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
+                {selectedItem.attributes &&
+                  selectedItem.attributes.length > 0 && (
+                    <div className="card">
+                      <div className="card-header">Thuộc tính</div>
+                      <ul className="list-group list-group-flush">
+                        {selectedItem.attributes.map((attr, index) => (
+                          <li
+                            key={index}
+                            className="list-group-item d-flex justify-content-between align-items-center"
+                          >
+                            <span className="text-muted">{attr.traitType}</span>
+                            <span className="badge bg-primary rounded-pill">
+                              {attr.value}
+                            </span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
 
                 {buyError && (
                   <Alert variant="danger" className="mt-3">
@@ -846,7 +860,11 @@ const MarketplaceHome = ({ referenceId }) => {
             </div>
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="secondary" onClick={() => setSelectedItem(null)} disabled={buyLoading}>
+            <Button
+              variant="secondary"
+              onClick={() => setSelectedItem(null)}
+              disabled={buyLoading}
+            >
               Hủy
             </Button>
             <Button
@@ -867,7 +885,7 @@ const MarketplaceHome = ({ referenceId }) => {
                   Đang xử lý...
                 </>
               ) : (
-                'Xác nhận mua'
+                "Xác nhận mua"
               )}
             </Button>
           </Modal.Footer>

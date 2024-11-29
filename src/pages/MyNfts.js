@@ -3,6 +3,7 @@ import { apiKey } from "../utils/constants";
 import { Modal, Button, Alert, ProgressBar } from "react-bootstrap";
 import ItemsTable from "./../components/ItemsTable";
 
+
 const CreateProduct = ({ referenceId, collectionId, onSuccess }) => {
   const [showModal, setShowModal] = useState(false);
   const [showResultModal, setShowResultModal] = useState(false);
@@ -239,7 +240,7 @@ const CreateProduct = ({ referenceId, collectionId, onSuccess }) => {
       {/* Phần tạo sản phẩm */}
       <div className="mb-4">
         <Button variant="primary" onClick={() => setShowModal(true)}>
-          Tạo Sản Phẩm Mới
+          Thêm mới
         </Button>
       </div>
 
@@ -251,7 +252,7 @@ const CreateProduct = ({ referenceId, collectionId, onSuccess }) => {
       {/* Create Product Modal */}
       <Modal show={showModal} onHide={handleClose} size="lg">
         <Modal.Header closeButton>
-          <Modal.Title className="theme-text">Tạo Sản Phẩm Mới</Modal.Title>
+          {/* <Modal.Title className="theme-text">Thêm mới</Modal.Title> */}
         </Modal.Header>
         <Modal.Body>
           {error && (
@@ -417,6 +418,7 @@ const CreateProduct = ({ referenceId, collectionId, onSuccess }) => {
         </Modal.Footer>
       </Modal>
     </div>
+
   );
 };
 

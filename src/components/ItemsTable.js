@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { apiKey } from "../utils/constants";
-import { Modal, Button, Form, Alert, Pagination } from "react-bootstrap";
+import { Modal, Form, Alert, Pagination } from "react-bootstrap";
 import { toast } from "react-toastify";
+import { Box, Chip, Sheet, Table, Typography, Button } from "@mui/joy";
 
 const ItemsTable = ({ ownerReferenceId }) => {
   // State quản lý danh sách items
@@ -414,160 +415,133 @@ const ItemsTable = ({ ownerReferenceId }) => {
           </div>
         ) : (
           <>
-            <div className="table-responsive">
-              <style>
-                {`
-                    @media (max-width: 768px) {
-                        .table-responsive {
-                            display: block;
-                            width: 100%;
-                            overflow-x: auto;
-                            -webkit-overflow-scrolling: touch;
-                        }
-                        
-                        .mobile-table-wrapper {
-                            min-width: 800px;
-                        }
-                    }
-
-                    .item-image {
-                        width: 40px;
-                        height: 40px;
-                        object-fit: cover;
-                        border-radius: 4px;
-                        transition: transform 0.2s;
-                    }
-
-                    .item-image:hover {
-                        transform: scale(3);
-                        z-index: 1000;
-                    }
-
-                    .table > :not(caption) > * > * {
-                        padding: 0.75rem;
-                        vertical-align: middle;
-                    }
-
-                    .badge-currency {
-                        background-color: #e3f2fd;
-                        color: #1976d2;
-                    }
-
-                    .badge-asset {
-                        background-color: #f3e5f5;
-                        color: #7b1fa2;
-                    }
-
-                    .badge-for-sale {
-                        background-color: #e8f5e9;
-                        color: #2e7d32;
-                    }
-
-                    .table-hover tbody tr:hover {
-                        background-color: rgba(0, 0, 0, 0.02);
-                    }
-                    `}
-              </style>
-              <div className="mobile-table-wrapper">
-                <table className="table table-hover mb-0">
-                  {/* Tiêu đề bảng */}
-                  <thead>
-                    <tr className="bg-light">
-                      <th style={{ width: "90px" }}>Loại</th>
-                      <th style={{ width: "80px" }}>Ảnh</th>
-                      <th style={{ width: "180px" }}>Tên</th>
-                      <th style={{ width: "200px" }}>Mô tả</th>
-                      <th style={{ width: "120px" }}>Trạng Thái Bán</th>
-                      <th style={{ width: "150px" }}>Hành Động</th>
-                    </tr>
-                  </thead>
-                  {/* Nội dung bảng */}
-                  <tbody>
-                    {currentItems.map((itemData, index) => {
+            <Sheet sx={{ backgroundColor: "transparent" }}>
+              <Table sx={{ backgroundColor: "transparent" }} borderAxis="both" >
+                <thead>
+                  <tr>
+                    <th style={{ width: "80px" }} className="text-center">Image</th>
+                    <th style={{ width: "180px" }} className="text-center">Tên</th>
+                    <th style={{ width: "120px" }} className="text-center">Trạng Thái </th>
+                    <th style={{ width: "90px" }} className="text-center">Loại</th>
+                    <th style={{ width: "200px" }} className="text-center">Mô tả</th>
+                    <th style={{ width: "150px" }} className="text-center">Hành Động</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {
+                    currentItems.map((itemData, index) => {
                       const { type, item } = itemData;
-                      if (type === "Currency") return null; // Ẩn các item loại Currency
+                      if (type === "Currency") return null;
 
                       return (
                         <tr key={index}>
-                          {/* Các cột thông tin */}
-                          <td>
-                            <span
-                              className={`badge ${
-                                type === "Currency"
-                                  ? "badge-currency"
-                                  : "badge-asset"
-                              }`}
-                            >
-                              {type}
-                            </span>
+                          <td className="text-center">
+                            <Box
+                              component="img"
+                              src={item.imageUrl}
+                              alt={item.name}
+                              title={item.name}
+                              sx={{
+                                width: 100,
+                                height: 100,
+                                borderRadius: "4px",
+                                objectFit: "cover",
+                                border: "1px solid #ddd",
+                                padding: "2px",
+                              }}
+                            />
                           </td>
                           <td>
-                            {item.imageUrl ? (
-                              <img
-                                src={item.imageUrl}
-                                alt={item.name}
-                                className="item-image"
-                                title={item.name}
-                              />
+                            <Typography
+                              level="body1"
+                              fontWeight="md"
+                              noWrap
+                              sx={{
+                                mb: 0.5,
+                              }}
+                            >
+                              {item.name || item.symbol || "-"}
+                            </Typography>
+                            <Typography
+                              level="body3"
+                              color="neutral"
+                              sx={{
+                                display: "block",
+                                wordWrap: "break-word",
+                              }}
+                            >
+                              ID: {truncateText(item.id, 15)}
+                            </Typography>
+                          </td>
+                          <td className="text-center">
+                            {item.priceCents > 0 && item.status === "Committed" ? (
+                              <Box>
+                                <Typography
+                                  level="body2"
+                                  fontWeight="md"
+                                  color="success"
+                                  sx={{ mb: 0.5 }}
+                                >
+                                  Đang Bán
+                                </Typography>
+                                <Typography
+                                  level="body3"
+                                  color="neutral"
+                                  sx={{ fontSize: "0.875rem" }}
+                                >
+                                  {(item.priceCents / 100).toFixed(2)} USDC
+                                </Typography>
+                              </Box>
                             ) : (
-                              <div
-                                className="bg-light d-flex align-items-center justify-content-center"
-                                style={{
-                                  width: "40px",
-                                  height: "40px",
-                                  borderRadius: "4px",
-                                }}
+                              <Typography
+                                level="body2"
+                                fontWeight="md"
+                                color="danger"
                               >
-                                <i className="fas fa-image text-muted"></i>
-                              </div>
+                                Chưa Bán
+                              </Typography>
                             )}
                           </td>
-                          <td>
-                            <div className="fw-medium">
-                              {item.name || item.symbol || "-"}
-                            </div>
-                            <small className="text-muted">
-                              ID: {truncateText(item.id, 15)}
-                            </small>
+                          <td className="text-center">
+                            <Chip
+                              color="primary"
+                              size="md"
+                              variant="soft"
+                            >
+                              {itemData.type}
+                            </Chip>
                           </td>
                           <td>
                             {type !== "Currency" && (
-                              <div
-                                className="text-truncate"
-                                style={{ maxWidth: "200px" }}
+                              <Typography
+                                level="body2"
+                                noWrap
                                 title={item.description}
+                                sx={{
+                                  maxWidth: 200,
+                                  overflow: "hidden",
+                                  textOverflow: "ellipsis",
+                                  whiteSpace: "nowrap",
+                                }}
                               >
                                 {item.description || "-"}
-                              </div>
+                              </Typography>
                             )}
                           </td>
-                          <td>
-                            {item.priceCents > 0 &&
-                            item.status === "Committed" ? (
-                              <span className="badge badge-for-sale">
-                                Đang Bán
-                                <br />
-                                <small>
-                                  {(item.priceCents / 100).toFixed(2)} USDC
-                                </small>
-                              </span>
-                            ) : (
-                              <span className="badge bg-secondary">
-                                Chưa Bán
-                              </span>
-                            )}
-                          </td>
-                          {/* Nút hành động */}
-                          <td>
+                          <td className="text-center">
                             {type === "UniqueAsset" && (
-                              <div className="d-flex gap-2">
-                                {/* Nút chỉnh sửa */}
-                                {!(
-                                  item.priceCents > 0 &&
-                                  item.status === "Committed"
-                                ) && (
+                              <Box
+                                sx={{
+                                  display: "flex",
+                                  gap: 1,
+                                  justifyContent: "center",
+                                  alignItems: "center",
+                                }}
+                              >
+                                {!(item.priceCents > 0 && item.status === "Committed") && (
                                   <Button
-                                    variant="outline-secondary"
+                                    variant="outlined"
+                                    color="neutral"
                                     size="sm"
                                     onClick={() => openEditModal(item)}
                                   >
@@ -575,36 +549,38 @@ const ItemsTable = ({ ownerReferenceId }) => {
                                   </Button>
                                 )}
 
-                                {/* Nút bán/hủy bán */}
-                                {item.priceCents > 0 &&
-                                item.status === "Committed" ? (
+                                {item.priceCents > 0 && item.status === "Committed" ? (
                                   <Button
-                                    variant="outline-danger"
+                                    variant="soft"
+                                    color="danger"
                                     size="sm"
                                     onClick={() => handleCancelSale(item.id)}
                                     disabled={isProcessing}
+                                    loading={isProcessing}
                                   >
                                     {isProcessing ? "Đang Xử Lý..." : "Hủy Bán"}
                                   </Button>
                                 ) : (
                                   <Button
-                                    variant="outline-primary"
+                                    variant="soft"
+                                    color="primary"
                                     size="sm"
                                     onClick={() => openListingModal(item)}
                                   >
                                     Liệt Kê Bán
                                   </Button>
                                 )}
-                              </div>
+                              </Box>
                             )}
                           </td>
+
                         </tr>
-                      );
-                    })}
-                  </tbody>
-                </table>
-              </div>
-            </div>
+                      )
+                    })
+                  }
+                </tbody>
+              </Table>
+            </Sheet>
 
             {/* Phân trang */}
             <div className="d-flex justify-content-between align-items-center p-3">

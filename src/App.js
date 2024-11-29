@@ -20,6 +20,7 @@ import logo from "./assert/sol.png";
 import Authentication from "./pages/Authentication";
 import Home from "./pages/Home"
 import MyNfts from "./pages/MyNfts";
+import Maket from './pages/Maket';
 import User from "./components/User";
 import AccountBalanceWalletOutlinedIcon from "@mui/icons-material/AccountBalanceWalletOutlined";
 import {
@@ -341,6 +342,16 @@ function App() {
                     <i className="bi bi-collection me-2"></i>
                     NFT của tôi
                   </NavLink>
+                  <NavLink
+                    to="/exchange-rate"
+                    className={({ isActive }) =>
+                      `nav-link ${isActive ? "active" : ""}`
+                    }
+                    onClick={closeSidebarOnMobile}
+                  >
+                    <i class="bi bi-coin me-2"></i>
+                    Đồng sol và usdc
+                  </NavLink>
                 </div>
               </div>
 
@@ -541,6 +552,12 @@ function App() {
                         referenceId={userData?.referenceId}
                         email={userData?.email}
                       />
+                    }
+                  />
+                  <Route
+                    path="/exchange-rate"
+                    element={
+                      <Maket />
                     }
                   />
                 </Routes>

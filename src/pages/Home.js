@@ -1,7 +1,8 @@
 import axios from "axios";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import { Alert, Card, Form, Modal, Spinner } from "react-bootstrap";
+import { Carousel, Card, Alert, Spinner, Modal, Form } from "react-bootstrap";
 import { apiKey } from "../utils/constants";
+import "./home.css";
 import {
   Box,
   Button,
@@ -384,220 +385,389 @@ const MarketplaceHome = ({ referenceId }) => {
   }
 
   return (
-    <Container>
-      <div className="container">
-        {/* Thêm thông báo thời gian cập nhật cuối cùng */}
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            marginTop: 3,
-            marginBottom: 3,
-          }}
-        >
-          <Typography className="text-muted">
-            Cập nhật lần cuối: {new Date(lastFetchTime).toLocaleString()}
-          </Typography>
-          <Button size="sm" onClick={handleManualRefresh}>
-            Làm mới ngay
-          </Button>
-        </Box>
-
-        {/* Pagination and display controls */}
-        <div className="row g-3 align-items-center">
-          <Box className="col-12 col-md-4 d-flex align-items-center justify-content-between justify-content-md-start">
-            <Typography className="me-3 text-nowrap">
-              Hiển thị: {currentItems.length} / {totalResults} sản phẩm
-            </Typography>
-            <Select
-              size="sm"
-              style={{ width: "auto" }}
-              value={perPage}
-              onChange={(e) => changePerPage(Number(e.target.value))}
-              className="d-md-none d-block"
-            >
-              {[5, 10, 20, 50].map((num) => (
-                <Option key={num} value={num}>
-                  {num} sản phẩm/trang
-                </Option>
-              ))}
-            </Select>
-          </Box>
-
-          <div className="col-12 col-md-4 d-flex justify-content-center">
-            <Pagination
-              currentPage={currentPage}
-              totalPages={totalPages}
-              onPageChange={changePage}
-            />
+    <>
+      <header className="bg-primary text-white p-3 text-center">
+        <h1>
+          <div className="scrolling-text">
+            Chào mừng đến với cửa hàng của chúng tôi! Khám phá các sản phẩm
+            tuyệt vời ngay hôm nay.
           </div>
-
-          <div className="col-12 col-md-4 d-none d-md-block text-end">
-            <Form.Select
-              size="sm"
-              style={{ width: "auto", float: "right" }}
-              value={perPage}
-              onChange={(e) => changePerPage(Number(e.target.value))}
-            >
-              {[5, 10, 20, 50].map((num) => (
-                <option key={num} value={num}>
-                  {num} sản phẩm/trang
-                </option>
-              ))}
-            </Form.Select>
+        </h1>
+      </header>
+      <section>
+        <Carousel interval={2000}>
+          <Carousel.Item>
+            <img
+              className="d-block w-100"
+              src="https://www.nhatot.com/_next/image?url=https%3A%2F%2Fcdn.chotot.com%2Fadmincentre%2FF1Iy8pIV295wRSonsdRDkQyFRY2Thcip3egSSilkyBg%2Fpreset%3Araw%2Fplain%2F9b8dc9ce0f6367d20b2b06856688d446-2820459848732268726.jpg&w=1920&q=75"
+              alt="First slide"
+            />
+          </Carousel.Item>
+          <Carousel.Item>
+            <img
+              className="d-block w-100"
+              src="https://www.nhatot.com/_next/image?url=https%3A%2F%2Fcdn.chotot.com%2Fadmincentre%2FyBhtF0umYzoin8P-zvuOPNhhuN7CKpYIK9HFGLu6K0w%2Fpreset%3Araw%2Fplain%2Ff828d23ca5817fc621868c24ac02ec41-2906689577158153760.jpg&w=1920&q=75"
+              alt="Second slide"
+            />
+          </Carousel.Item>
+          <Carousel.Item>
+            <img
+              className="d-block w-100"
+              src="https://www.nhatot.com/_next/image?url=https%3A%2F%2Fcdn.chotot.com%2Fadmincentre%2F5brlsfjgobqb6GHL_ARdJ9hKlwZBeUPMFTDCDJ8HVlM%2Fpreset%3Araw%2Fplain%2F641d00cf91962826635b6a63d18d673a-2887378227930944686.jpg&w=1920&q=75"
+              alt="Third slide"
+            />
+          </Carousel.Item>
+        </Carousel>
+      </section>
+      <section
+        className="property-listing"
+        style={{
+          background: "linear-gradient(to right, #0288D1, white, #FF5722)",
+          padding: "50px",
+        }}
+      >
+        <h2 className="m-3">Mua bán nhà đất theo địa điểm</h2>
+        <div className="row">
+          <div className="col-md-4">
+            <div className="card">
+              <div className="card-img-top" style={{ position: "relative" }}>
+                <img
+                  src="https://bannha.net/wp-content/uploads/elementor/thumbs/hn7-q47ou0cu5z7x80rl9givgifa97bzo3wgbardc246vk.jpg"
+                  className="img-fluid"
+                  alt="Property"
+                  style={{ width: "450px", height: "200px" }}
+                />
+                <div
+                  className="card-location"
+                  style={{
+                    position: "absolute",
+                    bottom: "10px",
+                    left: "10px",
+                    background: "rgba(0, 0, 0, 0.5)",
+                    color: "white",
+                    padding: "5px",
+                  }}
+                >
+                  Hanoi
+                </div>
+              </div>
+            </div>
+            <div className="card">
+              <div className="card-img-top" style={{ position: "relative" }}>
+                <img
+                  src="https://bannha.net/wp-content/uploads/elementor/thumbs/thanh-pho-moi-binh-duong-o-dau-q47oudiktnpxqk8h4m7nff3qklj4nvcp13w61xkogg.jpg"
+                  className="img-fluid"
+                  alt="Property"
+                  style={{ width: "450px", height: "200px" }}
+                />
+                <div
+                  className="card-location"
+                  style={{
+                    position: "absolute",
+                    bottom: "10px",
+                    left: "10px",
+                    background: "rgba(0, 0, 0, 0.5)",
+                    color: "white",
+                    padding: "5px",
+                  }}
+                >
+                  Binh Duong
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="col-md-4" style={{ marginTop: "55px" }}>
+            <div className="card">
+              <div className="card-img-top" style={{ position: "relative" }}>
+                <img
+                  src="https://bannha.net/wp-content/uploads/2024/03/TPHCM.jpg"
+                  className="img-fluid"
+                  alt="Property"
+                />
+                <div
+                  className="card-location"
+                  style={{
+                    position: "absolute",
+                    bottom: "10px",
+                    left: "10px",
+                    background: "rgba(0, 0, 0, 0.5)",
+                    color: "white",
+                    padding: "5px",
+                  }}
+                >
+                  Ho Chi Minh
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="col-md-4">
+            <div className="card">
+              <div className="card-img-top" style={{ position: "relative" }}>
+                <img
+                  src="https://bannha.net/wp-content/uploads/elementor/thumbs/du-lich-da-nang-q47ou52145ecu2kri0k0az8l84otqlf3zy0sqfx80g.jpg"
+                  className="img-fluid"
+                  alt="Property"
+                  style={{ width: "450px", height: "200px" }}
+                />
+                <div
+                  className="card-location"
+                  style={{
+                    position: "absolute",
+                    bottom: "10px",
+                    left: "10px",
+                    background: "rgba(0, 0, 0, 0.5)",
+                    color: "white",
+                    padding: "5px",
+                  }}
+                >
+                  Da Nang
+                </div>
+              </div>
+            </div>
+            <div className="card">
+              <div className="card-img-top" style={{ position: "relative" }}>
+                <img
+                  src="https://bannha.net/wp-content/uploads/elementor/thumbs/dan-so-vung-tau-3-q47oui7rrtwdcm1nd68s9vx1jivyqcvcpr5lgbdplc.jpg"
+                  alt="Property"
+                  style={{ width: "450px", height: "200px" }}
+                />
+                <div
+                  className="card-location"
+                  style={{
+                    position: "absolute",
+                    bottom: "10px",
+                    left: "10px",
+                    background: "rgba(0, 0, 0, 0.5)",
+                    color: "white",
+                    padding: "5px",
+                  }}
+                >
+                  Vung Tau
+                </div>
+              </div>
+            </div>
           </div>
         </div>
+      </section>
+      <Container>
+        <div className="container">
+          {/* Pagination and display controls */}
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              marginTop: 3,
+            }}
+          >
+            <div style={{ fontSize: "24px", fontWeight: "500" }}>
+              Sản phẩm đang bán
+            </div>
+            <div className="text-end" style={{ flexDirection: "column" }}>
+              <Button size="sm" onClick={handleManualRefresh}>
+                Làm mới ngay
+              </Button>
+              <Typography className="text-muted">
+                Cập nhật lần cuối: {new Date(lastFetchTime).toLocaleString()}
+              </Typography>
+            </div>
+          </Box>
+          {/* Product grid */}
+          <div className="row row-cols-1 row-cols-md-3 g-4 mt-2">
+            {currentItems.map((itemData) => {
+              const item = itemData.item;
+              return (
+                <div key={item.id} className="col">
+                  <Card className="h-100 d-flex flex-column shadow-sm hover-lift">
+                    <Card.Img
+                      variant="top"
+                      src={item.imageUrl || "/default-image.jpg"}
+                      alt={item.name || "Hình ảnh sản phẩm"}
+                      className="card-img-top"
+                      style={{
+                        width: "100%",
+                        height: "auto",
+                        aspectRatio: "16/9",
+                        objectFit: "cover",
+                      }}
+                    />
+                    <Card.Body style={{ flex: 1 }}>
+                      <Card.Title className="fw-bold">{item.name}</Card.Title>
+                      <Card.Text className="text-muted">
+                        Tác giả: {item.owner.referenceId}
+                      </Card.Text>
 
-        {/* Product grid */}
-        <div className="row row-cols-1 row-cols-md-3 g-4 mt-2">
-          {currentItems.map((itemData) => {
-            const item = itemData.item;
-            return (
-              <div key={item.id} className="col">
-                <Card className="h-100 d-flex flex-column shadow-sm hover-lift">
-                  <Card.Img
-                    variant="top"
-                    src={item.imageUrl || "/default-image.jpg"}
-                    alt={item.name || "Hình ảnh sản phẩm"}
-                    className="card-img-top"
+                      <div className="d-flex justify-content-between align-items-center mt-auto">
+                        <div>
+                          <Chip color="primary" variant="soft">{`$${(
+                            item.priceCents / 100
+                          ).toFixed(2)} USDC`}</Chip>
+                        </div>
+                        <Button
+                          variant="btn btn-primary"
+                          sx={{ color: "#fff" }}
+                          onClick={() => handleBuyItem(itemData)}
+                        >
+                          Mua ngay
+                        </Button>
+                      </div>
+                    </Card.Body>
+                  </Card>
+                </div>
+              );
+            })}
+          </div>
+
+          <div className="row g-3 align-items-center mt-3">
+            <Box className="col-12 col-md-4 d-flex align-items-center justify-content-between justify-content-md-start">
+              <Typography className="me-3 text-nowrap">
+                Hiển thị: {currentItems.length} / {totalResults} sản phẩm
+              </Typography>
+              <Select
+                size="sm"
+                style={{ width: "auto" }}
+                value={perPage}
+                onChange={(e) => changePerPage(Number(e.target.value))}
+                className="d-md-none d-block"
+              >
+                {[5, 10, 20, 50].map((num) => (
+                  <Option key={num} value={num}>
+                    {num} sản phẩm/trang
+                  </Option>
+                ))}
+              </Select>
+            </Box>
+
+            <div className="col-12 col-md-4 d-flex justify-content-center">
+              <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={changePage}
+              />
+            </div>
+
+            <div className="col-12 col-md-4 d-none d-md-block text-end">
+              <Form.Select
+                size="sm"
+                style={{ width: "auto", float: "right" }}
+                value={perPage}
+                onChange={(e) => changePerPage(Number(e.target.value))}
+              >
+                {[5, 10, 20, 50].map((num) => (
+                  <option key={num} value={num}>
+                    {num} sản phẩm/trang
+                  </option>
+                ))}
+              </Form.Select>
+            </div>
+          </div>
+        </div>
+        {/* Purchase Confirmation Modal */}
+        {selectedItem && (
+          <Modal
+            show={!!selectedItem}
+            onHide={() => setSelectedItem(null)}
+            size="lg"
+          >
+            <Modal.Header closeButton>
+              <Modal.Title>Xác nhận mua {selectedItem.name}</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <div className="row">
+                <div className="col-md-6">
+                  <img
+                    src={selectedItem.imageUrl}
+                    alt={selectedItem.name}
+                    className="img-fluid mb-3 rounded"
                     style={{
+                      maxHeight: "300px",
                       width: "100%",
-                      height: "auto",
-                      aspectRatio: "16/9",
                       objectFit: "cover",
                     }}
                   />
-                  <Card.Body style={{ flex: 1 }}>
-                    <Card.Title className="fw-bold">{item.name}</Card.Title>
-                    <Card.Text className="text-muted">
-                      Tác giả: {item.owner.referenceId}
-                    </Card.Text>
-
-                    <div className="d-flex justify-content-between align-items-center mt-auto">
-                      <div>
-                        <Chip color="primary" variant="soft">{`$${(
-                          item.priceCents / 100
-                        ).toFixed(2)} USDC`}</Chip>
-                      </div>
-                      <Button
-                        variant="btn btn-primary"
-                        sx={{ color: "#fff" }}
-                        onClick={() => handleBuyItem(itemData)}
-                      >
-                        Mua ngay
-                      </Button>
-                    </div>
-                  </Card.Body>
-                </Card>
-              </div>
-            );
-          })}
-        </div>
-      </div>
-      {/* Purchase Confirmation Modal */}
-      {selectedItem && (
-        <Modal
-          show={!!selectedItem}
-          onHide={() => setSelectedItem(null)}
-          size="lg"
-        >
-          <Modal.Header closeButton>
-            <Modal.Title>Xác nhận mua {selectedItem.name}</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <div className="row">
-              <div className="col-md-6">
-                <img
-                  src={selectedItem.imageUrl}
-                  alt={selectedItem.name}
-                  className="img-fluid mb-3 rounded"
-                  style={{
-                    maxHeight: "300px",
-                    width: "100%",
-                    objectFit: "cover",
-                  }}
-                />
-              </div>
-              <div className="col-md-6">
-                <h5 className="mb-3">Chi tiết sản phẩm</h5>
-                <div className="card mb-3">
-                  <div className="card-body">
-                    <p className="card-text">
-                      <strong>Tên:</strong> {selectedItem.name}
-                    </p>
-                    <p className="card-text">
-                      <strong>Mô tả:</strong>{" "}
-                      {selectedItem.description || "Không có mô tả"}
-                    </p>
-                    <p className="card-text">
-                      <strong>Giá:</strong> $
-                      {(selectedItem.priceCents / 100).toFixed(2)} USDC
-                    </p>
-                  </div>
                 </div>
-
-                {selectedItem.attributes &&
-                  selectedItem.attributes.length > 0 && (
-                    <div className="card">
-                      <div className="card-header">Thuộc tính</div>
-                      <ul className="list-group list-group-flush">
-                        {selectedItem.attributes.map((attr, index) => (
-                          <li
-                            key={index}
-                            className="list-group-item d-flex justify-content-between align-items-center"
-                          >
-                            <span className="text-muted">{attr.traitType}</span>
-                            <span className="badge bg-primary rounded-pill">
-                              {attr.value}
-                            </span>
-                          </li>
-                        ))}
-                      </ul>
+                <div className="col-md-6">
+                  <h5 className="mb-3">Chi tiết sản phẩm</h5>
+                  <div className="card mb-3">
+                    <div className="card-body">
+                      <p className="card-text">
+                        <strong>Tên:</strong> {selectedItem.name}
+                      </p>
+                      <p className="card-text">
+                        <strong>Mô tả:</strong>{" "}
+                        {selectedItem.description || "Không có mô tả"}
+                      </p>
+                      <p className="card-text">
+                        <strong>Giá:</strong> $
+                        {(selectedItem.priceCents / 100).toFixed(2)} USDC
+                      </p>
                     </div>
-                  )}
+                  </div>
 
-                {buyError && (
-                  <Alert variant="danger" className="mt-3">
-                    {buyError}
-                  </Alert>
-                )}
+                  {selectedItem.attributes &&
+                    selectedItem.attributes.length > 0 && (
+                      <div className="card">
+                        <div className="card-header">Thuộc tính</div>
+                        <ul className="list-group list-group-flush">
+                          {selectedItem.attributes.map((attr, index) => (
+                            <li
+                              key={index}
+                              className="list-group-item d-flex justify-content-between align-items-center"
+                            >
+                              <span className="text-muted">
+                                {attr.traitType}
+                              </span>
+                              <span className="badge bg-primary rounded-pill">
+                                {attr.value}
+                              </span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+
+                  {buyError && (
+                    <Alert variant="danger" className="mt-3">
+                      {buyError}
+                    </Alert>
+                  )}
+                </div>
               </div>
-            </div>
-          </Modal.Body>
-          <Modal.Footer>
-            <Button
-              variant="secondary"
-              onClick={() => setSelectedItem(null)}
-              disabled={buyLoading}
-            >
-              Hủy
-            </Button>
-            <Button
-              variant="primary"
-              onClick={buyItemWithPhantomWallet}
-              disabled={buyLoading}
-            >
-              {buyLoading ? (
-                <>
-                  <Spinner
-                    as="span"
-                    animation="border"
-                    size="sm"
-                    role="status"
-                    aria-hidden="true"
-                    className="me-2"
-                  />
-                  Đang xử lý...
-                </>
-              ) : (
-                "Xác nhận mua"
-              )}
-            </Button>
-          </Modal.Footer>
-        </Modal>
-      )}
-    </Container>
+            </Modal.Body>
+            <Modal.Footer>
+              <Button
+                variant="secondary"
+                onClick={() => setSelectedItem(null)}
+                disabled={buyLoading}
+              >
+                Hủy
+              </Button>
+              <Button
+                variant="primary"
+                onClick={buyItemWithPhantomWallet}
+                disabled={buyLoading}
+              >
+                {buyLoading ? (
+                  <>
+                    <Spinner
+                      as="span"
+                      animation="border"
+                      size="sm"
+                      role="status"
+                      aria-hidden="true"
+                      className="me-2"
+                    />
+                    Đang xử lý...
+                  </>
+                ) : (
+                  "Xác nhận mua"
+                )}
+              </Button>
+            </Modal.Footer>
+          </Modal>
+        )}
+      </Container>
+    </>
   );
 };
 

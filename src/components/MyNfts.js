@@ -254,7 +254,7 @@ const CreateProduct = ({ referenceId, collectionId, onSuccess }) => {
           
           <form onSubmit={handleSubmit}>
             <div className="mb-3">
-              <label className="form-label">Tên sản phẩm</label>
+              <label className="form-label">Tên sản phẩm <span style={{ color: 'red' }}>*</span></label>
               <input 
                 type="text" 
                 className={`form-control ${formErrors.name ? 'is-invalid' : ''}`}
@@ -263,32 +263,44 @@ const CreateProduct = ({ referenceId, collectionId, onSuccess }) => {
                 onChange={handleInputChange}
                 placeholder="Nhập tên sản phẩm"
                 disabled={isSubmitting}
-                maxLength={32}
+                maxLength={32}               
               />
               {formErrors.name && (
                 <div className="invalid-feedback">{formErrors.name}</div>
               )}
             </div>
 
-            <div className="mb-3">
-              <label className="form-label">Mô tả</label>
-              <textarea 
-                className={`form-control ${formErrors.description ? 'is-invalid' : ''}`}
-                name="description"
-                value={formData.description}
-                onChange={handleInputChange}
-                rows="3"
-                placeholder="Mô tả về sản phẩm"
-                disabled={isSubmitting}
-                maxLength={64}
-              />
-              {formErrors.description && (
-                <div className="invalid-feedback">{formErrors.description}</div>
-              )}
+            <div className="row mb-3">
+              <div className="col-md-6">
+                <label className="form-label">Tên thuộc tính</label>
+                <input 
+                  type="text" 
+                  className="form-control"
+                  name="attributeName"
+                  value={formData.attributeName}
+                  onChange={handleInputChange}
+                  placeholder="Tên thuộc tính"
+                  disabled={isSubmitting}
+                />
+              </div>
+              <div className="col-md-6">
+                <label className="form-label">Giá trị thuộc tính</label>
+                <input 
+                  type="text" 
+                  className="form-control"
+                  name="attributeValue"
+                  value={formData.attributeValue}
+                  onChange={handleInputChange}
+                  placeholder="Giá trị thuộc tính"
+                  disabled={isSubmitting}
+                />
+              </div>
             </div>
 
+            
+
             <div className="mb-3">
-              <label className="form-label">Hình ảnh</label>
+              <label className="form-label">Hình ảnh <span style={{ color: 'red' }}>*</span></label>
               <div className="d-flex gap-3 align-items-start">
                 <div className="flex-grow-1">
                   <input 
@@ -318,32 +330,23 @@ const CreateProduct = ({ referenceId, collectionId, onSuccess }) => {
               </div>
             </div>
 
-            <div className="row mb-3">
-              <div className="col-md-6">
-                <label className="form-label">Tên thuộc tính (không bắt buộc)</label>
-                <input 
-                  type="text" 
-                  className="form-control"
-                  name="attributeName"
-                  value={formData.attributeName}
-                  onChange={handleInputChange}
-                  placeholder="Tên thuộc tính"
-                  disabled={isSubmitting}
-                />
-              </div>
-              <div className="col-md-6">
-                <label className="form-label">Giá trị thuộc tính</label>
-                <input 
-                  type="text" 
-                  className="form-control"
-                  name="attributeValue"
-                  value={formData.attributeValue}
-                  onChange={handleInputChange}
-                  placeholder="Giá trị thuộc tính"
-                  disabled={isSubmitting}
-                />
-              </div>
+            <div className="mb-3">
+              <label className="form-label">Mô tả <span style={{ color: 'red' }}>*</span></label>
+              <textarea 
+                className={`form-control ${formErrors.description ? 'is-invalid' : ''}`}
+                name="description"
+                value={formData.description}
+                onChange={handleInputChange}
+                rows="3"
+                placeholder="Mô tả về sản phẩm"
+                disabled={isSubmitting}
+                maxLength={64}
+              />
+              {formErrors.description && (
+                <div className="invalid-feedback">{formErrors.description}</div>
+              )}
             </div>
+           
 
             {uploadProgress > 0 && (
               <div className="mb-3">

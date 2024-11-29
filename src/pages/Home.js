@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { Carousel, Card, Alert, Spinner, Modal, Form } from "react-bootstrap";
 import { apiKey } from "../utils/constants";
+import "./home.css";
 import {
   Box,
   Button,
@@ -387,10 +388,10 @@ const MarketplaceHome = ({ referenceId }) => {
     <>
       <header className="bg-primary text-white p-3 text-center">
         <h1>
-          <marquee behavior="scroll" direction="left">
+          <div className="scrolling-text">
             Chào mừng đến với cửa hàng của chúng tôi! Khám phá các sản phẩm
             tuyệt vời ngay hôm nay.
-          </marquee>
+          </div>
         </h1>
       </header>
       <section>

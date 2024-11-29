@@ -44,23 +44,36 @@ const CreateProduct = ({ referenceId, collectionId, onSuccess }) => {
   const validateForm = () => {
     const errors = {};
     if (!formData.name.trim()) {
-      errors.name = "Tên sản phẩm là bắt buộc";
-    } else if (formData.name.length > 32) {
-      errors.name = "Tên không được vượt quá 32 ký tự";
+      errors.name = "Tên căn hộ là bắt buộc";
+    } else if (formData.name.length > 50) {
+      errors.name = "Tên không được vượt quá 50 ký tự";
     }
 
     if (!formData.description.trim()) {
       errors.description = "Mô tả là bắt buộc";
-    } else if (formData.description.length > 64) {
-      errors.description = "Mô tả không được vượt quá 64 ký tự";
+    } else if (formData.description.length > 100) {
+      errors.description = "Mô tả không được vượt quá 100 ký tự";
     }
 
     if (!formData.image) {
       errors.image = "Hình ảnh là bắt buộc";
     }
 
+    if (!formData.attributeName.trim()) {
+      errors.attributeName = "Tên thuộc tính là bắt buộc";
+    } else if (formData.attributeName.length > 30) {
+      errors.attributeName = "Tên thuộc tính không được vượt quá 30 ký tự";
+    }
+
+    if (!formData.attributeValue.trim()) {
+      errors.attributeValue = "Giá trị thuộc tính là bắt buộc";
+    } else if (formData.attributeValue.length > 30) {
+      errors.attributeValue = "Giá trị thuộc tính không được vượt quá 30 ký tự";
+    }
+
     return errors;
   };
+
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -163,7 +176,7 @@ const CreateProduct = ({ referenceId, collectionId, onSuccess }) => {
       setUploadProgress(50);
 
       if (!imageUrl) {
-        throw new Error("Không nhận được URL hình ảnh từ Cloudinary");
+        throw new Error("Không nhận được URL hình ảnh");
       }
 
       const payload = {
@@ -210,7 +223,7 @@ const CreateProduct = ({ referenceId, collectionId, onSuccess }) => {
       const data = await response.json();
 
       setIsSuccess(true);
-      setResultMessage("Tạo sản phẩm thành công!");
+      setResultMessage("Tạo thành công!");
       resetForm();
       setShowModal(false);
 
@@ -221,7 +234,7 @@ const CreateProduct = ({ referenceId, collectionId, onSuccess }) => {
       console.error("Error creating product:", err);
       setIsSuccess(false);
       setResultMessage(
-        err.message || "Không thể tạo sản phẩm. Vui lòng thử lại sau"
+        err.message || "Không thể thêm căn hộ. Vui lòng thử lại sau"
       );
     } finally {
       setIsSubmitting(false);
@@ -237,22 +250,18 @@ const CreateProduct = ({ referenceId, collectionId, onSuccess }) => {
 
   return (
     <div>
-      {/* Phần tạo sản phẩm */}
       <div className="mb-4">
         <Button variant="primary" onClick={() => setShowModal(true)}>
           Thêm mới
         </Button>
       </div>
 
-      {/* Phần bảng hiển thị sản phẩm */}
       <div className="mt-4">
         <ItemsTable ownerReferenceId={referenceId} />
       </div>
 
-      {/* Create Product Modal */}
       <Modal show={showModal} onHide={handleClose} size="lg">
         <Modal.Header closeButton>
-          {/* <Modal.Title className="theme-text">Thêm mới</Modal.Title> */}
         </Modal.Header>
         <Modal.Body>
           {error && (
@@ -263,16 +272,16 @@ const CreateProduct = ({ referenceId, collectionId, onSuccess }) => {
 
           <form onSubmit={handleSubmit}>
             <div className="mb-3">
-              <label className="form-label">Tên sản phẩm <span style={{ color: 'red' }}>*</span></label>
-              <input 
-                type="text" 
+              <label className="form-label">Tên căn hộ <span style={{ color: 'red' }}>*</span></label>
+              <input
+                type="text"
                 className={`form-control ${formErrors.name ? 'is-invalid' : ''}`}
                 name="name"
                 value={formData.name}
                 onChange={handleInputChange}
-                placeholder="Nhập tên sản phẩm"
+                placeholder="Nhập tên căn hộ"
                 disabled={isSubmitting}
-                maxLength={32}               
+                maxLength={32}
               />
               {formErrors.name && (
                 <div className="invalid-feedback">{formErrors.name}</div>
@@ -281,31 +290,40 @@ const CreateProduct = ({ referenceId, collectionId, onSuccess }) => {
 
             <div className="row mb-3">
               <div className="col-md-6">
-                <label className="form-label">Tên thuộc tính</label>
-                <input 
-                  type="text" 
-                  className="form-control"
+                <label className="form-label">Tên thuộc tính <span style={{ color: 'red' }}>*</span></label>
+                <input
+                  type="text"
+                  className={`form-control ${formErrors.attributeName ? 'is-invalid' : ''}`}
                   name="attributeName"
                   value={formData.attributeName}
                   onChange={handleInputChange}
-                  placeholder="Tên thuộc tính"
+                  placeholder="Nhập tên thuộc tính"
                   disabled={isSubmitting}
+                  maxLength={30}  
                 />
+                {formErrors.attributeName && (
+                  <div className="invalid-feedback">{formErrors.attributeName}</div>
+                )}
               </div>
               <div className="col-md-6">
-                <label className="form-label">Giá trị thuộc tính</label>
-                <input 
-                  type="text" 
-                  className="form-control"
+                <label className="form-label">Giá trị thuộc tính <span style={{ color: 'red' }}>*</span></label>
+                <input
+                  type="text"
+                  className={`form-control ${formErrors.attributeValue ? 'is-invalid' : ''}`}
                   name="attributeValue"
                   value={formData.attributeValue}
                   onChange={handleInputChange}
-                  placeholder="Giá trị thuộc tính"
+                  placeholder="Nhập giá trị thuộc tính"
                   disabled={isSubmitting}
+                  maxLength={30}  // Set max length to 30
                 />
+                {formErrors.attributeValue && (
+                  <div className="invalid-feedback">{formErrors.attributeValue}</div>
+                )}
               </div>
-              </div>
-            
+            </div>
+
+
 
             <div className="mb-3">
               <label className="form-label">Hình ảnh <span style={{ color: 'red' }}>*</span></label>
@@ -313,9 +331,8 @@ const CreateProduct = ({ referenceId, collectionId, onSuccess }) => {
                 <div className="flex-grow-1">
                   <input
                     type="file"
-                    className={`form-control ${
-                      formErrors.image ? "is-invalid" : ""
-                    }`}
+                    className={`form-control ${formErrors.image ? "is-invalid" : ""
+                      }`}
                     accept="image/*"
                     onChange={handleImageChange}
                     disabled={isSubmitting}
@@ -323,9 +340,6 @@ const CreateProduct = ({ referenceId, collectionId, onSuccess }) => {
                   {formErrors.image && (
                     <div className="invalid-feedback">{formErrors.image}</div>
                   )}
-                  <small className="text-muted d-block mt-1">
-                    Hỗ trợ: JPG, PNG, GIF (Max: 5MB)
-                  </small>
                 </div>
                 {preview && (
                   <div style={{ width: "100px", height: "100px" }}>
@@ -346,13 +360,13 @@ const CreateProduct = ({ referenceId, collectionId, onSuccess }) => {
 
             <div className="mb-3">
               <label className="form-label">Mô tả <span style={{ color: 'red' }}>*</span></label>
-              <textarea 
+              <textarea
                 className={`form-control ${formErrors.description ? 'is-invalid' : ''}`}
                 name="description"
                 value={formData.description}
                 onChange={handleInputChange}
                 rows="3"
-                placeholder="Mô tả về sản phẩm"
+                placeholder="Nhập mô tả"
                 disabled={isSubmitting}
                 maxLength={64}
               />
@@ -360,7 +374,7 @@ const CreateProduct = ({ referenceId, collectionId, onSuccess }) => {
                 <div className="invalid-feedback">{formErrors.description}</div>
               )}
             </div>
-           
+
 
             {uploadProgress > 0 && (
               <div className="mb-3">
@@ -395,7 +409,7 @@ const CreateProduct = ({ referenceId, collectionId, onSuccess }) => {
                 Đang tạo...
               </>
             ) : (
-              "Tạo sản phẩm"
+              "Tạo mới"
             )}
           </Button>
         </Modal.Footer>

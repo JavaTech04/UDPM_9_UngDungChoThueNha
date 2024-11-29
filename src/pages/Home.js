@@ -549,224 +549,215 @@ const MarketplaceHome = ({ referenceId }) => {
           </div>
         </div>
       </section>
-      <Container>
-        <div className="container">
-          {/* Pagination and display controls */}
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              marginTop: 3,
-            }}
-          >
-            <div style={{ fontSize: "24px", fontWeight: "500" }}>
-              Sản phẩm đang bán
-            </div>
-            <div className="text-end" style={{ flexDirection: "column" }}>
-              <Button size="sm" onClick={handleManualRefresh}>
-                Làm mới ngay
-              </Button>
-              <Typography className="text-muted">
-                Cập nhật lần cuối: {new Date(lastFetchTime).toLocaleString()}
-              </Typography>
-            </div>
-          </Box>
-          {/* Product grid */}
-          <div className="row row-cols-1 row-cols-md-3 g-4 mt-2">
-            {currentItems.map((itemData) => {
-              const item = itemData.item;
-              return (
-                <div key={item.id} className="col">
-                  <Card className="h-100 d-flex flex-column shadow-sm hover-lift">
-                    <Card.Img
-                      variant="top"
+
+      <div className="container-fluid">
+        {/* Pagination and display controls */}
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            marginTop: 3,
+          }}
+        >
+          <div style={{ fontSize: "24px", fontWeight: "500" }}>
+            Sản phẩm đang bán
+          </div>
+          <div className="text-end" style={{ flexDirection: "column" }}>
+            <Button size="sm" onClick={handleManualRefresh}>
+              Làm mới ngay
+            </Button>
+            <Typography className="text-muted">
+              Cập nhật lần cuối: {new Date(lastFetchTime).toLocaleString()}
+            </Typography>
+          </div>
+        </Box>
+        {/* Product grid */}
+        <div className="row row-cols-1 row-cols-md-4 g-4 mt-2">
+          {currentItems.map((itemData) => {
+            const item = itemData.item;
+            return (
+              <div key={item.id} className="col">
+                <div className="custom-card shadow-lg">
+                  <div className="custom-card-img">
+                    <img
                       src={item.imageUrl || "/default-image.jpg"}
                       alt={item.name || "Hình ảnh sản phẩm"}
-                      className="card-img-top"
-                      style={{
-                        width: "100%",
-                        height: "auto",
-                        aspectRatio: "16/9",
-                        objectFit: "cover",
-                      }}
+                      className="w-100 h-100"
                     />
-                    <Card.Body style={{ flex: 1 }}>
-                      <Card.Title className="fw-bold">{item.name}</Card.Title>
-                      <Card.Text className="text-muted">
-                        Tác giả: {item.owner.referenceId}
-                      </Card.Text>
-
-                      <div className="d-flex justify-content-between align-items-center mt-auto">
-                        <div>
-                          <Chip color="primary" variant="soft">{`$${(
-                            item.priceCents / 100
-                          ).toFixed(2)} USDC`}</Chip>
-                        </div>
-                        <Button
-                          variant="btn btn-primary"
-                          sx={{ color: "#fff" }}
-                          onClick={() => handleBuyItem(itemData)}
-                        >
-                          Mua ngay
-                        </Button>
-                      </div>
-                    </Card.Body>
-                  </Card>
-                </div>
-              );
-            })}
-          </div>
-
-          <div className="row g-3 align-items-center mt-3">
-            <Box className="col-12 col-md-4 d-flex align-items-center justify-content-between justify-content-md-start">
-              <Typography className="me-3 text-nowrap">
-                Hiển thị: {currentItems.length} / {totalResults} sản phẩm
-              </Typography>
-              <Select
-                size="sm"
-                style={{ width: "auto" }}
-                value={perPage}
-                onChange={(e) => changePerPage(Number(e.target.value))}
-                className="d-md-none d-block"
-              >
-                {[5, 10, 20, 50].map((num) => (
-                  <Option key={num} value={num}>
-                    {num} sản phẩm/trang
-                  </Option>
-                ))}
-              </Select>
-            </Box>
-
-            <div className="col-12 col-md-4 d-flex justify-content-center">
-              <Pagination
-                currentPage={currentPage}
-                totalPages={totalPages}
-                onPageChange={changePage}
-              />
-            </div>
-
-            <div className="col-12 col-md-4 d-none d-md-block text-end">
-              <Form.Select
-                size="sm"
-                style={{ width: "auto", float: "right" }}
-                value={perPage}
-                onChange={(e) => changePerPage(Number(e.target.value))}
-              >
-                {[5, 10, 20, 50].map((num) => (
-                  <option key={num} value={num}>
-                    {num} sản phẩm/trang
-                  </option>
-                ))}
-              </Form.Select>
-            </div>
-          </div>
-        </div>
-        {/* Purchase Confirmation Modal */}
-        {selectedItem && (
-          <Modal
-            show={!!selectedItem}
-            onHide={() => setSelectedItem(null)}
-            size="lg"
-          >
-            <Modal.Header closeButton>
-              <Modal.Title>Xác nhận mua {selectedItem.name}</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-              <div className="row">
-                <div className="col-md-6">
-                  <img
-                    src={selectedItem.imageUrl}
-                    alt={selectedItem.name}
-                    className="img-fluid mb-3 rounded"
-                    style={{
-                      maxHeight: "300px",
-                      width: "100%",
-                      objectFit: "cover",
-                    }}
-                  />
-                </div>
-                <div className="col-md-6">
-                  <h5 className="mb-3">Chi tiết sản phẩm</h5>
-                  <div className="card mb-3">
-                    <div className="card-body">
-                      <p className="card-text">
-                        <strong>Tên:</strong> {selectedItem.name}
-                      </p>
-                      <p className="card-text">
-                        <strong>Mô tả:</strong>{" "}
-                        {selectedItem.description || "Không có mô tả"}
-                      </p>
-                      <p className="card-text">
-                        <strong>Giá:</strong> $
-                        {(selectedItem.priceCents / 100).toFixed(2)} USDC
-                      </p>
+                  </div>
+                  <div className="custom-card-body">
+                    <h5 className="fw-bold">{item.name}</h5>
+                    <p className="text-muted small">
+                      Tác giả:{" "}
+                      {item.owner.referenceId.length > 20
+                        ? `${item.owner.referenceId.substring(0, 20)}...`
+                        : item.owner.referenceId}
+                    </p>
+                    <div className="d-flex justify-content-between align-items-center">
+                      <span className="price-tag">{`$${(
+                        item.priceCents / 100
+                      ).toFixed(2)} USDC`}</span>
+                      <button
+                        className="btn-custom"
+                        onClick={() => handleBuyItem(itemData)}
+                      >
+                        Mua ngay
+                      </button>
                     </div>
                   </div>
-
-                  {selectedItem.attributes &&
-                    selectedItem.attributes.length > 0 && (
-                      <div className="card">
-                        <div className="card-header">Thuộc tính</div>
-                        <ul className="list-group list-group-flush">
-                          {selectedItem.attributes.map((attr, index) => (
-                            <li
-                              key={index}
-                              className="list-group-item d-flex justify-content-between align-items-center"
-                            >
-                              <span className="text-muted">
-                                {attr.traitType}
-                              </span>
-                              <span className="badge bg-primary rounded-pill">
-                                {attr.value}
-                              </span>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    )}
-
-                  {buyError && (
-                    <Alert variant="danger" className="mt-3">
-                      {buyError}
-                    </Alert>
-                  )}
                 </div>
               </div>
-            </Modal.Body>
-            <Modal.Footer>
-              <Button
-                variant="secondary"
-                onClick={() => setSelectedItem(null)}
-                disabled={buyLoading}
-              >
-                Hủy
-              </Button>
-              <Button
-                variant="primary"
-                onClick={buyItemWithPhantomWallet}
-                disabled={buyLoading}
-              >
-                {buyLoading ? (
-                  <>
-                    <Spinner
-                      as="span"
-                      animation="border"
-                      size="sm"
-                      role="status"
-                      aria-hidden="true"
-                      className="me-2"
-                    />
-                    Đang xử lý...
-                  </>
-                ) : (
-                  "Xác nhận mua"
+            );
+          })}
+        </div>
+
+        <div className="row g-3 align-items-center mt-3">
+          <Box className="col-12 col-md-4 d-flex align-items-center justify-content-between justify-content-md-start">
+            <Typography className="me-3 text-nowrap">
+              Hiển thị: {currentItems.length} / {totalResults} sản phẩm
+            </Typography>
+            <Select
+              size="sm"
+              style={{ width: "auto" }}
+              value={perPage}
+              onChange={(e) => changePerPage(Number(e.target.value))}
+              className="d-md-none d-block"
+            >
+              {[5, 10, 20, 50].map((num) => (
+                <Option key={num} value={num}>
+                  {num} sản phẩm/trang
+                </Option>
+              ))}
+            </Select>
+          </Box>
+
+          <div className="col-12 col-md-4 d-flex justify-content-center">
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={changePage}
+            />
+          </div>
+
+          <div className="col-12 col-md-4 d-none d-md-block text-end">
+            <Form.Select
+              size="sm"
+              style={{ width: "auto", float: "right" }}
+              value={perPage}
+              onChange={(e) => changePerPage(Number(e.target.value))}
+            >
+              {[5, 10, 20, 50].map((num) => (
+                <option key={num} value={num}>
+                  {num} sản phẩm/trang
+                </option>
+              ))}
+            </Form.Select>
+          </div>
+        </div>
+      </div>
+      {/* Purchase Confirmation Modal */}
+      {selectedItem && (
+        <Modal
+          show={!!selectedItem}
+          onHide={() => setSelectedItem(null)}
+          size="lg"
+        >
+          <Modal.Header closeButton>
+            <Modal.Title>Xác nhận mua {selectedItem.name}</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <div className="row">
+              <div className="col-md-6">
+                <img
+                  src={selectedItem.imageUrl}
+                  alt={selectedItem.name}
+                  className="img-fluid mb-3 rounded"
+                  style={{
+                    maxHeight: "300px",
+                    width: "100%",
+                    objectFit: "cover",
+                  }}
+                />
+              </div>
+              <div className="col-md-6">
+                <h5 className="mb-3">Chi tiết sản phẩm</h5>
+                <div className="card mb-3">
+                  <div className="card-body">
+                    <p className="card-text">
+                      <strong>Tên:</strong> {selectedItem.name}
+                    </p>
+                    <p className="card-text">
+                      <strong>Mô tả:</strong>{" "}
+                      {selectedItem.description || "Không có mô tả"}
+                    </p>
+                    <p className="card-text">
+                      <strong>Giá:</strong> $
+                      {(selectedItem.priceCents / 100).toFixed(2)} USDC
+                    </p>
+                  </div>
+                </div>
+
+                {selectedItem.attributes &&
+                  selectedItem.attributes.length > 0 && (
+                    <div className="card">
+                      <div className="card-header">Thuộc tính</div>
+                      <ul className="list-group list-group-flush">
+                        {selectedItem.attributes.map((attr, index) => (
+                          <li
+                            key={index}
+                            className="list-group-item d-flex justify-content-between align-items-center"
+                          >
+                            <span className="text-muted">{attr.traitType}</span>
+                            <span className="badge bg-primary rounded-pill">
+                              {attr.value}
+                            </span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+
+                {buyError && (
+                  <Alert variant="danger" className="mt-3">
+                    {buyError}
+                  </Alert>
                 )}
-              </Button>
-            </Modal.Footer>
-          </Modal>
-        )}
-      </Container>
+              </div>
+            </div>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button
+              variant="secondary"
+              onClick={() => setSelectedItem(null)}
+              disabled={buyLoading}
+            >
+              Hủy
+            </Button>
+            <Button
+              variant="primary"
+              onClick={buyItemWithPhantomWallet}
+              disabled={buyLoading}
+            >
+              {buyLoading ? (
+                <>
+                  <Spinner
+                    as="span"
+                    animation="border"
+                    size="sm"
+                    role="status"
+                    aria-hidden="true"
+                    className="me-2"
+                  />
+                  Đang xử lý...
+                </>
+              ) : (
+                "Xác nhận mua"
+              )}
+            </Button>
+          </Modal.Footer>
+        </Modal>
+      )}
     </>
   );
 };

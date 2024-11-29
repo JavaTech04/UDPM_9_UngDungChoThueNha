@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
-import { apiKey } from '../api';
-import { Modal, Button, Alert, ProgressBar } from 'react-bootstrap';
-import ItemsTable from './ItemsTable';
+import React, { useState } from "react";
+import { apiKey } from "../utils/constants";
+import { Modal, Button, Alert, ProgressBar } from "react-bootstrap";
+import ItemsTable from "./../components/ItemsTable";
 
 const CreateProduct = ({ referenceId, collectionId, onSuccess }) => {
   const [showModal, setShowModal] = useState(false);
@@ -11,28 +11,28 @@ const CreateProduct = ({ referenceId, collectionId, onSuccess }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState(null);
   const [uploadProgress, setUploadProgress] = useState(0);
-  
+
   const [formData, setFormData] = useState({
-    name: '',
-    description: '',
+    name: "",
+    description: "",
     image: null,
-    attributeName: '',
-    attributeValue: ''
+    attributeName: "",
+    attributeValue: "",
   });
 
   const [preview, setPreview] = useState(null);
   const [formErrors, setFormErrors] = useState({});
 
-  const CLOUDINARY_UPLOAD_PRESET = 'ARTSOLANA';
-  const CLOUDINARY_CLOUD_NAME = 'dy3nmkszo';
+  const CLOUDINARY_UPLOAD_PRESET = "ARTSOLANA";
+  const CLOUDINARY_CLOUD_NAME = "dy3nmkszo";
 
   const resetForm = () => {
     setFormData({
-      name: '',
-      description: '',
+      name: "",
+      description: "",
       image: null,
-      attributeName: '',
-      attributeValue: ''
+      attributeName: "",
+      attributeValue: "",
     });
     setPreview(null);
     setFormErrors({});
@@ -63,14 +63,14 @@ const CreateProduct = ({ referenceId, collectionId, onSuccess }) => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
     if (formErrors[name]) {
-      setFormErrors(prev => ({
+      setFormErrors((prev) => ({
         ...prev,
-        [name]: null
+        [name]: null,
       }));
     }
   };
@@ -79,24 +79,24 @@ const CreateProduct = ({ referenceId, collectionId, onSuccess }) => {
     const file = e.target.files[0];
     if (file) {
       if (file.size > 5 * 1024 * 1024) {
-        setFormErrors(prev => ({
+        setFormErrors((prev) => ({
           ...prev,
-          image: "Kích thước file không được vượt quá 5MB"
+          image: "Kích thước file không được vượt quá 5MB",
         }));
         return;
       }
 
-      if (!file.type.startsWith('image/')) {
-        setFormErrors(prev => ({
+      if (!file.type.startsWith("image/")) {
+        setFormErrors((prev) => ({
           ...prev,
-          image: "Vui lòng chọn file hình ảnh"
+          image: "Vui lòng chọn file hình ảnh",
         }));
         return;
       }
 
-      setFormData(prev => ({
+      setFormData((prev) => ({
         ...prev,
-        image: file
+        image: file,
       }));
 
       const reader = new FileReader();
@@ -106,9 +106,9 @@ const CreateProduct = ({ referenceId, collectionId, onSuccess }) => {
       reader.readAsDataURL(file);
 
       if (formErrors.image) {
-        setFormErrors(prev => ({
+        setFormErrors((prev) => ({
           ...prev,
-          image: null
+          image: null,
         }));
       }
     }
@@ -116,29 +116,31 @@ const CreateProduct = ({ referenceId, collectionId, onSuccess }) => {
 
   const uploadImageToCloudinary = async (file) => {
     const formData = new FormData();
-    formData.append('file', file);
-    formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
-    formData.append('api_key', process.env.REACT_APP_CLOUDINARY_API_KEY);
+    formData.append("file", file);
+    formData.append("upload_preset", CLOUDINARY_UPLOAD_PRESET);
+    formData.append("api_key", process.env.REACT_APP_CLOUDINARY_API_KEY);
 
     try {
       const response = await fetch(
         `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`,
         {
-          method: 'POST',
-          body: formData
+          method: "POST",
+          body: formData,
         }
       );
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.error?.message || 'Upload failed');
+        throw new Error(errorData.error?.message || "Upload failed");
       }
 
       const data = await response.json();
       return data.secure_url;
     } catch (err) {
-      console.error('Error uploading to Cloudinary:', err);
-      throw new Error('Không thể tải lên hình ảnh. Vui lòng thử lại. Chi tiết: ' + err.message);
+      console.error("Error uploading to Cloudinary:", err);
+      throw new Error(
+        "Không thể tải lên hình ảnh. Vui lòng thử lại. Chi tiết: " + err.message
+      );
     }
   };
 
@@ -160,7 +162,7 @@ const CreateProduct = ({ referenceId, collectionId, onSuccess }) => {
       setUploadProgress(50);
 
       if (!imageUrl) {
-        throw new Error('Không nhận được URL hình ảnh từ Cloudinary');
+        throw new Error("Không nhận được URL hình ảnh từ Cloudinary");
       }
 
       const payload = {
@@ -169,38 +171,43 @@ const CreateProduct = ({ referenceId, collectionId, onSuccess }) => {
           name: formData.name,
           description: formData.description,
           imageUrl: imageUrl,
-          attributes: []
+          attributes: [],
         },
-        destinationUserReferenceId: referenceId
+        destinationUserReferenceId: referenceId,
       };
 
       if (formData.attributeName && formData.attributeValue) {
         payload.details.attributes.push({
           traitType: formData.attributeName,
-          value: formData.attributeValue
+          value: formData.attributeValue,
         });
       }
 
       setUploadProgress(75);
-      
-      const response = await fetch('https://api.gameshift.dev/nx/unique-assets', {
-        method: 'POST',
-        headers: {
-          'accept': 'application/json',
-          'content-type': 'application/json',
-          'x-api-key': apiKey
-        },
-        body: JSON.stringify(payload)
-      });
+
+      const response = await fetch(
+        "https://api.gameshift.dev/nx/unique-assets",
+        {
+          method: "POST",
+          headers: {
+            accept: "application/json",
+            "content-type": "application/json",
+            "x-api-key": apiKey,
+          },
+          body: JSON.stringify(payload),
+        }
+      );
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
+        throw new Error(
+          errorData.message || `HTTP error! status: ${response.status}`
+        );
       }
 
       setUploadProgress(100);
       const data = await response.json();
-      
+
       setIsSuccess(true);
       setResultMessage("Tạo sản phẩm thành công!");
       resetForm();
@@ -209,11 +216,12 @@ const CreateProduct = ({ referenceId, collectionId, onSuccess }) => {
       if (onSuccess) {
         onSuccess(data);
       }
-
     } catch (err) {
-      console.error('Error creating product:', err);
+      console.error("Error creating product:", err);
       setIsSuccess(false);
-      setResultMessage(err.message || "Không thể tạo sản phẩm. Vui lòng thử lại sau");
+      setResultMessage(
+        err.message || "Không thể tạo sản phẩm. Vui lòng thử lại sau"
+      );
     } finally {
       setIsSubmitting(false);
       setShowResultModal(true);
@@ -251,13 +259,15 @@ const CreateProduct = ({ referenceId, collectionId, onSuccess }) => {
               {error}
             </Alert>
           )}
-          
+
           <form onSubmit={handleSubmit}>
             <div className="mb-3">
               <label className="form-label">Tên sản phẩm</label>
-              <input 
-                type="text" 
-                className={`form-control ${formErrors.name ? 'is-invalid' : ''}`}
+              <input
+                type="text"
+                className={`form-control ${
+                  formErrors.name ? "is-invalid" : ""
+                }`}
                 name="name"
                 value={formData.name}
                 onChange={handleInputChange}
@@ -272,8 +282,10 @@ const CreateProduct = ({ referenceId, collectionId, onSuccess }) => {
 
             <div className="mb-3">
               <label className="form-label">Mô tả</label>
-              <textarea 
-                className={`form-control ${formErrors.description ? 'is-invalid' : ''}`}
+              <textarea
+                className={`form-control ${
+                  formErrors.description ? "is-invalid" : ""
+                }`}
                 name="description"
                 value={formData.description}
                 onChange={handleInputChange}
@@ -291,9 +303,11 @@ const CreateProduct = ({ referenceId, collectionId, onSuccess }) => {
               <label className="form-label">Hình ảnh</label>
               <div className="d-flex gap-3 align-items-start">
                 <div className="flex-grow-1">
-                  <input 
-                    type="file" 
-                    className={`form-control ${formErrors.image ? 'is-invalid' : ''}`}
+                  <input
+                    type="file"
+                    className={`form-control ${
+                      formErrors.image ? "is-invalid" : ""
+                    }`}
                     accept="image/*"
                     onChange={handleImageChange}
                     disabled={isSubmitting}
@@ -306,12 +320,16 @@ const CreateProduct = ({ referenceId, collectionId, onSuccess }) => {
                   </small>
                 </div>
                 {preview && (
-                  <div style={{ width: '100px', height: '100px' }}>
-                    <img 
-                      src={preview} 
-                      alt="Preview" 
+                  <div style={{ width: "100px", height: "100px" }}>
+                    <img
+                      src={preview}
+                      alt="Preview"
                       className="img-thumbnail"
-                      style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                      style={{
+                        width: "100%",
+                        height: "100%",
+                        objectFit: "cover",
+                      }}
                     />
                   </div>
                 )}
@@ -320,9 +338,11 @@ const CreateProduct = ({ referenceId, collectionId, onSuccess }) => {
 
             <div className="row mb-3">
               <div className="col-md-6">
-                <label className="form-label">Tên thuộc tính (không bắt buộc)</label>
-                <input 
-                  type="text" 
+                <label className="form-label">
+                  Tên thuộc tính (không bắt buộc)
+                </label>
+                <input
+                  type="text"
                   className="form-control"
                   name="attributeName"
                   value={formData.attributeName}
@@ -333,8 +353,8 @@ const CreateProduct = ({ referenceId, collectionId, onSuccess }) => {
               </div>
               <div className="col-md-6">
                 <label className="form-label">Giá trị thuộc tính</label>
-                <input 
-                  type="text" 
+                <input
+                  type="text"
                   className="form-control"
                   name="attributeValue"
                   value={formData.attributeValue}
@@ -347,23 +367,38 @@ const CreateProduct = ({ referenceId, collectionId, onSuccess }) => {
 
             {uploadProgress > 0 && (
               <div className="mb-3">
-                <ProgressBar now={uploadProgress} label={`${uploadProgress}%`} />
+                <ProgressBar
+                  now={uploadProgress}
+                  label={`${uploadProgress}%`}
+                />
               </div>
             )}
           </form>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose} disabled={isSubmitting}>
+          <Button
+            variant="secondary"
+            onClick={handleClose}
+            disabled={isSubmitting}
+          >
             Hủy
           </Button>
-          <Button variant="primary" onClick={handleSubmit} disabled={isSubmitting}>
+          <Button
+            variant="primary"
+            onClick={handleSubmit}
+            disabled={isSubmitting}
+          >
             {isSubmitting ? (
               <>
-                <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                <span
+                  className="spinner-border spinner-border-sm me-2"
+                  role="status"
+                  aria-hidden="true"
+                ></span>
                 Đang tạo...
               </>
             ) : (
-              'Tạo sản phẩm'
+              "Tạo sản phẩm"
             )}
           </Button>
         </Modal.Footer>
@@ -372,10 +407,10 @@ const CreateProduct = ({ referenceId, collectionId, onSuccess }) => {
       {/* Result Modal */}
       <Modal show={showResultModal} onHide={() => setShowResultModal(false)}>
         <Modal.Header closeButton>
-          <Modal.Title>{isSuccess ? 'Thành công' : 'Lỗi'}</Modal.Title>
+          <Modal.Title>{isSuccess ? "Thành công" : "Lỗi"}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Alert variant={isSuccess ? 'success' : 'danger'}>
+          <Alert variant={isSuccess ? "success" : "danger"}>
             {resultMessage}
           </Alert>
         </Modal.Body>

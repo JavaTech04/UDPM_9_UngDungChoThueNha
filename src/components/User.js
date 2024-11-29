@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { apiKey } from '../api';
+import { apiKey } from '../utils/constants';
 
 const UserDashboard = ({ userData }) => {
   const [nfts, setNfts] = useState([]);

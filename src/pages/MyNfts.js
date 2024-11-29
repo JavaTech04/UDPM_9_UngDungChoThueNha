@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { apiKey } from "../api";
+import { apiKey } from "../utils/constants";
 import { Modal, Button, Alert, ProgressBar } from "react-bootstrap";
-import ItemsTable from "./ItemsTable";
+import ItemsTable from "./../components/ItemsTable";
 
 const CreateProduct = ({ referenceId, collectionId, onSuccess }) => {
   const [showModal, setShowModal] = useState(false);

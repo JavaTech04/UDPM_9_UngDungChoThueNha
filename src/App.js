@@ -16,11 +16,10 @@ import {
   BrowserRouter as Router,
   Routes,
 } from "react-router-dom";
-import "./App.css";
-import logo from "./sol.png";
-import AuthForm from "./components/AuthForm";
-import Home from "./components/Home";
-import MyNfts from "./components/MyNfts";
+import logo from "./assert/sol.png";
+import Authentication from "./pages/Authentication";
+import Home from "./pages/Home"
+import MyNfts from "./pages/MyNfts";
 import User from "./components/User";
 import AccountBalanceWalletOutlinedIcon from "@mui/icons-material/AccountBalanceWalletOutlined";
 import {
@@ -279,7 +278,10 @@ function App() {
       <div className={`app-container ${theme}-theme`}>
         {!isLoggedIn ? (
           <div className="auth-container">
-            <AuthForm setIsLoggedIn={setIsLoggedIn} setUserData={setUserData} />
+            <Authentication
+              setIsLoggedIn={setIsLoggedIn}
+              setUserData={setUserData}
+            />
           </div>
         ) : (
           <div className="dashboard-container">

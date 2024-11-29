@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { Alert, Card, Form, Modal, Spinner } from "react-bootstrap";
-import { apiKey } from "../api";
+import { apiKey } from "../utils/constants";
 import {
   Box,
   Button,

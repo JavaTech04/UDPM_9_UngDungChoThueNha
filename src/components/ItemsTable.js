@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { apiKey } from "../api";
+import { apiKey } from "../utils/constants";
 import { Modal, Button, Form, Alert, Pagination } from "react-bootstrap";
 import { toast } from "react-toastify";
 

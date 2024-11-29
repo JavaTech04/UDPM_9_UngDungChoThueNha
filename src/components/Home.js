@@ -439,103 +439,11 @@
 
 import React, { useState, useEffect, useCallback, useMemo } from "react";
 import axios from "axios";
-import { Alert, Button, Card, Form, Modal, Spinner } from "react-bootstrap";
+import { Alert, Button, Spinner, Modal } from "react-bootstrap";
 import { apiKey } from "../api";
-
-const usePagination = (items, initialPerPage = 10) => {
-  const [pagination, setPagination] = useState({
-    currentPage: 1,
-    perPage: initialPerPage,
-    totalPages: 0,
-    totalResults: 0,
-  });
-
-  const paginatedItems = useMemo(() => {
-    const startIndex = (pagination.currentPage - 1) * pagination.perPage;
-    const endIndex = startIndex + pagination.perPage;
-
-    return {
-      currentItems: items.slice(startIndex, endIndex),
-      totalPages: Math.ceil(items.length / pagination.perPage),
-      totalResults: items.length,
-    };
-  }, [items, pagination.currentPage, pagination.perPage]);
-
-  const changePage = useCallback((newPage) => {
-    setPagination((prev) => ({
-      ...prev,
-      currentPage: newPage,
-    }));
-  }, []);
-
-  const changePerPage = useCallback((newPerPage) => {
-    setPagination((prev) => ({
-      ...prev,
-      perPage: newPerPage,
-      currentPage: 1,
-    }));
-  }, []);
-
-  return {
-    ...pagination,
-    currentItems: paginatedItems.currentItems,
-    totalPages: paginatedItems.totalPages,
-    totalResults: paginatedItems.totalResults,
-    changePage,
-    changePerPage,
-  };
-};
-
-const Pagination = ({ currentPage, totalPages, onPageChange }) => {
-  if (totalPages <= 1) return null;
-
-  return (
-    <nav>
-      <ul className="pagination mb-0">
-        {["Đầu", "Trước", "Tiếp", "Cuối"].map((label, index) => {
-          const isStart = index === 0;
-          const isBack = index === 1;
-          const isNext = index === 2;
-          const isEnd = index === 3;
-
-          const isDisabled =
-            ((isStart || isBack) && currentPage === 1) ||
-            ((isNext || isEnd) && currentPage === totalPages);
-
-          const pageToGo = isStart
-            ? 1
-            : isBack
-            ? currentPage - 1
-            : isNext
-            ? currentPage + 1
-            : totalPages;
-
-          return (
-            <li
-              key={label}
-              className={`page-item ${isDisabled ? "disabled" : ""}`}
-            >
-              <Button
-                variant="outline-secondary"
-                size="sm"
-                className={index > 0 ? "ms-2" : ""}
-                onClick={() => onPageChange(pageToGo)}
-                disabled={isDisabled}
-              >
-                {label}
-              </Button>
-            </li>
-          );
-        })}
-        <li className="ms-3">
-          <span>
-            Trang {currentPage} / {totalPages}
-          </span>
-        </li>
-      </ul>
-    </nav>
-  );
-};
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/swiper-bundle.min.css";
+import { FaExclamationTriangle } from "react-icons/fa";
 
 const MarketplaceHome = ({ referenceId }) => {
   const [allItems, setAllItems] = useState([]);
@@ -544,6 +452,7 @@ const MarketplaceHome = ({ referenceId }) => {
   const [selectedItem, setSelectedItem] = useState(null);
   const [buyLoading, setBuyLoading] = useState(false);
   const [buyError, setBuyError] = useState(null);
+  const [showModal, setShowModal] = useState(false); // State to show/hide modal
 
   // Memoized filter function
   const filteredItems = useMemo(() => {
@@ -555,7 +464,7 @@ const MarketplaceHome = ({ referenceId }) => {
     );
   }, [allItems, referenceId]);
 
-  // Optimized fetch function with cancellation
+  // Fetch data with cleanup
   const fetchAllItems = useCallback(async (signal) => {
     setLoading(true);
     setError(null);
@@ -601,7 +510,6 @@ const MarketplaceHome = ({ referenceId }) => {
     }
   }, []);
 
-  // Fetch data with cleanup
   useEffect(() => {
     const controller = new AbortController();
     fetchAllItems(controller.signal);
@@ -611,21 +519,11 @@ const MarketplaceHome = ({ referenceId }) => {
     };
   }, [fetchAllItems]);
 
-  // Pagination hook
-  const {
-    currentItems,
-    currentPage,
-    totalPages,
-    totalResults,
-    perPage,
-    changePage,
-    changePerPage,
-  } = usePagination(filteredItems);
-
   // Buy item handler
   const handleBuyItem = async (item) => {
     setSelectedItem(item);
     setBuyError(null);
+    setShowModal(true); // Show modal when user clicks "Buy"
   };
 
   // Buy with Phantom Wallet
@@ -711,13 +609,59 @@ const MarketplaceHome = ({ referenceId }) => {
   return (
     <div className="container-fluid py-5 bg-light">
       <div className="container">
-        {/* Product Grid */}
-        <div className="row row-cols-1 row-cols-md-3 g-4">
-          {currentItems.map((itemData) => {
+        {/* Slider Quảng Cáo */}
+        <Swiper
+          spaceBetween={30}
+          slidesPerView={1}
+          loop={true}
+          pagination={{
+            clickable: true,
+          }}
+          autoplay={{
+            delay: 3000,
+            disableOnInteraction: false,
+          }}
+          className="mb-4 ad-slider"
+          style={{ width: "100%", height: "350px" }}
+        >
+          <SwiperSlide>
+            <div
+              className="ad-banner"
+              style={{ width: "100%", height: "350px" }}
+            >
+              <img
+                src="https://via.placeholder.com/1200x400.png?text=Gi%E1%BA%A3m%20Gi%C3%A1%20M%E1%BB%99t%20S%E1%BB%91%20S%E1%BA%A3n%20Ph%E1%BA%A9m"
+                alt="Quảng cáo 1"
+                className="d-block w-100"
+              />
+            </div>
+          </SwiperSlide>
+          <SwiperSlide>
+            <div className="ad-banner">
+              <img
+                src="https://via.placeholder.com/1200x400.png?text=Gi%E1%BA%A3m%20Gi%C3%A1%20M%E1%BB%99t%20S%E1%BB%91%20S%E1%BA%A3n%20Ph%E1%BA%A9m"
+                alt="Quảng cáo 2"
+                className="d-block w-100"
+              />
+            </div>
+          </SwiperSlide>
+          <SwiperSlide>
+            <div className="ad-banner">
+              <img
+                src="https://via.placeholder.com/1200x400.png?text=Khuy%E1%BB%87n%20M%C3%A1i%20S%E1%BB%8Dt%20Mua%20H%C3%B3a%20T%C3%ACnh"
+                alt="Quảng cáo 3"
+                className="d-block w-100"
+              />
+            </div>
+          </SwiperSlide>
+        </Swiper>
+        {/* Sản phẩm */}
+        <div className="row">
+          {filteredItems.map((itemData) => {
             const item = itemData.item;
             return (
-              <div key={item.id} className="col">
-                <div className="card h-100 shadow-sm border-0">
+              <div key={item.id} className="col-md-4 mb-4">
+                <div className="card h-100 shadow-sm border-0 hoverable-card">
                   <img
                     src={item.imageUrl || "/default-image.jpg"}
                     alt={item.name || "Hình ảnh sản phẩm"}
@@ -738,14 +682,19 @@ const MarketplaceHome = ({ referenceId }) => {
                     </p>
                     <div className="d-flex justify-content-between align-items-center mt-auto">
                       <span className="badge bg-primary p-2">
-                        {`$${(item.priceCents / 100).toFixed(2)} USDC`}
+                        {`$${(item.priceCents / 100).toFixed(2)}`}
                       </span>
-                      <button
-                        className="btn btn-outline-primary btn-sm"
-                        onClick={() => handleBuyItem(itemData.item)}
+                      <Button
+                        variant="primary"
+                        onClick={() => handleBuyItem(item)}
+                        disabled={buyLoading}
                       >
-                        Mua ngay
-                      </button>
+                        {buyLoading ? (
+                          <Spinner animation="border" size="sm" />
+                        ) : (
+                          "Mua"
+                        )}
+                      </Button>
                     </div>
                   </div>
                 </div>
@@ -755,139 +704,38 @@ const MarketplaceHome = ({ referenceId }) => {
         </div>
       </div>
 
-      {/* Pagination and Items Per Page */}
-      <div className="d-flex justify-content-between align-items-center mt-4">
-        <div className="d-flex align-items-center">
-          <span className="me-3 text-muted">
-            Hiển thị: {currentItems.length} / {totalResults} sản phẩm
-          </span>
-          <select
-            className="form-select form-select-sm w-auto"
-            value={perPage}
-            onChange={(e) => changePerPage(Number(e.target.value))}
+      {/* Modal */}
+      <Modal show={showModal} onHide={() => setShowModal(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Xác nhận mua sản phẩm</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <h4>{selectedItem?.name}</h4>
+          <p>
+            Bạn muốn mua sản phẩm này với giá{" "}
+            <strong>{`$${(selectedItem?.priceCents / 100).toFixed(
+              2
+            )} USDC`}</strong>
+            ?
+          </p>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setShowModal(false)}>
+            Hủy
+          </Button>
+          <Button
+            variant="primary"
+            onClick={buyItemWithPhantomWallet}
+            disabled={buyLoading}
           >
-            {[5, 10, 20, 50].map((num) => (
-              <option key={num} value={num}>
-                {num} sản phẩm/trang
-              </option>
-            ))}
-          </select>
-        </div>
-        <Pagination
-          currentPage={currentPage}
-          totalPages={totalPages}
-          onPageChange={changePage}
-        />
-      </div>
-
-      {/* Purchase Confirmation Modal */}
-      {selectedItem && (
-        <div
-          className="modal fade show"
-          tabIndex="-1"
-          style={{ display: "block", backgroundColor: "rgba(0,0,0,0.5)" }}
-          role="dialog"
-        >
-          <div className="modal-dialog modal-lg">
-            <div className="modal-content">
-              <div className="modal-header">
-                <h5 className="modal-title text-primary">
-                  Xác nhận mua {selectedItem.name}
-                </h5>
-                <button
-                  type="button"
-                  className="btn-close"
-                  onClick={() => setSelectedItem(null)}
-                ></button>
-              </div>
-              <div className="modal-body">
-                <div className="row">
-                  <div className="col-md-6">
-                    <img
-                      src={selectedItem.imageUrl}
-                      alt={selectedItem.name}
-                      className="img-fluid mb-3 rounded shadow-sm"
-                      style={{
-                        maxHeight: "300px",
-                        width: "100%",
-                        objectFit: "cover",
-                      }}
-                    />
-                  </div>
-                  <div className="col-md-6">
-                    <h5 className="mb-3">Chi tiết sản phẩm</h5>
-                    <div className="card mb-3 border-0">
-                      <div className="card-body">
-                        <p>
-                          <strong>Tên:</strong> {selectedItem.name}
-                        </p>
-                        <p>
-                          <strong>Mô tả:</strong>{" "}
-                          {selectedItem.description || "Không có mô tả"}
-                        </p>
-                        <p>
-                          <strong>Giá:</strong> $
-                          {(selectedItem.priceCents / 100).toFixed(2)} USDC
-                        </p>
-                      </div>
-                    </div>
-                    {selectedItem.attributes?.length > 0 && (
-                      <div className="card border-0">
-                        <div className="card-header bg-primary text-white">
-                          Thuộc tính
-                        </div>
-                        <ul className="list-group list-group-flush">
-                          {selectedItem.attributes.map((attr, index) => (
-                            <li
-                              key={index}
-                              className="list-group-item d-flex justify-content-between align-items-center"
-                            >
-                              <span className="text-muted">
-                                {attr.traitType}
-                              </span>
-                              <span className="badge bg-primary rounded-pill">
-                                {attr.value}
-                              </span>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    )}
-                    {buyError && (
-                      <div className="alert alert-danger mt-3">{buyError}</div>
-                    )}
-                  </div>
-                </div>
-              </div>
-              <div className="modal-footer">
-                <button
-                  className="btn btn-secondary"
-                  onClick={() => setSelectedItem(null)}
-                  disabled={buyLoading}
-                >
-                  Hủy
-                </button>
-                <button
-                  className="btn btn-primary"
-                  onClick={buyItemWithPhantomWallet}
-                  disabled={buyLoading}
-                >
-                  {buyLoading ? (
-                    <>
-                      <span
-                        className="spinner-border spinner-border-sm me-2"
-                        role="status"
-                      ></span>
-                      Đang xử lý...
-                    </>
-                  ) : (
-                    "Xác nhận mua"
-                  )}
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
+            {buyLoading ? <Spinner animation="border" size="sm" /> : "Mua"}
+          </Button>
+        </Modal.Footer>
+      </Modal>
+      {buyError && (
+        <Alert variant="danger" className="fixed-bottom mb-0">
+          <FaExclamationTriangle /> {buyError}
+        </Alert>
       )}
     </div>
   );

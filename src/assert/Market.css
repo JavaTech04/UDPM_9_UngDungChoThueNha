@@ -1,0 +1,48 @@
+.wiki-container {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+    line-height: 1.6;
+}
+
+.wiki-article h1 {
+    font-size: 24px;
+    margin-bottom: 15px;
+}
+
+.wiki-summary {
+    background-color: #f9f9f9;
+    padding: 15px;
+    border-left: 4px solid #0078d7;
+}
+
+.wiki-sections h2 {
+    font-size: 20px;
+    margin-top: 20px;
+}
+
+.info-box {
+    background: #f0f0f0;
+    padding: 10px;
+    margin: 10px 0;
+}
+
+.current-price {
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.change {
+    color: green;
+}
+
+.wiki-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.wiki-table th,
+.wiki-table td {
+    padding: 8px;
+    border: 1px solid #ddd;
+    text-align: left;
+}

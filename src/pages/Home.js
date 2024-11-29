@@ -679,7 +679,7 @@ const MarketplaceHome = ({ referenceId }) => {
                     <p className="card-text">
                       <strong>Tên:</strong> {selectedItem.name}
                     </p>
-                    <p className="card-text">
+                    <p className="card-text" style={{ fontSize: "12px" }}>
                       <strong>Mô tả:</strong>{" "}
                       {selectedItem.description || "Không có mô tả"}
                     </p>

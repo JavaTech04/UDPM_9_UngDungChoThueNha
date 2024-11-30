@@ -2,7 +2,7 @@ import axios from "axios";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { Carousel, Alert, Spinner, Modal, Form } from "react-bootstrap";
 import { apiKey } from "../utils/constants";
-import "./../assert/home.css";
+import './home.css';
 import { Box, Button, Option, Select, Typography } from "@mui/joy";
 
 const usePagination = (items, initialPerPage = 10) => {

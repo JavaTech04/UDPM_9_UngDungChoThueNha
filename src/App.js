@@ -22,6 +22,7 @@ import Home from "./pages/Home"
 import MyNfts from "./pages/MyNfts";
 import Maket from './pages/Maket';
 import User from "./components/User";
+import Map from "./pages/Map";
 import AccountBalanceWalletOutlinedIcon from "@mui/icons-material/AccountBalanceWalletOutlined";
 import {
   Avatar,
@@ -352,6 +353,16 @@ function App() {
                     <i class="bi bi-coin me-2"></i>
                     Đồng sol và usdc
                   </NavLink>
+                  <NavLink
+                    to="/map"
+                    className={({ isActive }) =>
+                      `nav-link ${isActive ? "active" : ""}`
+                    }
+                    onClick={closeSidebarOnMobile}
+                  >
+                   <i class="bi bi-map me-2"></i>
+                    Map
+                  </NavLink>
                 </div>
               </div>
 
@@ -559,6 +570,10 @@ function App() {
                     element={
                       <Maket />
                     }
+                  />
+                  <Route
+                    path="/map"
+                    element={<Map />}
                   />
                 </Routes>
               </div>

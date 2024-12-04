@@ -501,7 +501,7 @@ const ItemsTable = ({ ownerReferenceId }) => {
                                 color="neutral"
                                 sx={{ fontSize: "0.875rem" }}
                               >
-                                {(item.price.naturalAmount / 100).toFixed(2)} USDC
+                                {(item.price.naturalAmount / 1).toFixed(2)} USDC
                               </Typography>
                             </Box>
                           ) : (

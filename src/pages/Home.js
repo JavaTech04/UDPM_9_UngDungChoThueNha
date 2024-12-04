@@ -144,9 +144,8 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
 
         {/* Nút Next */}
         <li
-          className={`page-item ${
-            currentPage === totalPages ? "disabled" : ""
-          }`}
+          className={`page-item ${currentPage === totalPages ? "disabled" : ""
+            }`}
         >
           <Button
             variant="outline-secondary"
@@ -588,10 +587,10 @@ const MarketplaceHome = ({ referenceId }) => {
                     <div className="d-flex justify-content-between align-items-center">
                       <span className="price-tag">
                         {item?.price?.naturalAmount &&
-                        !isNaN(Number(item?.price?.naturalAmount))
+                          !isNaN(Number(item?.price?.naturalAmount))
                           ? `$${Number(item?.price?.naturalAmount).toFixed(
-                              2
-                            )} USDC`
+                            2
+                          )} USDC`
                           : "N/A"}
                       </span>
                       <button
@@ -683,18 +682,31 @@ const MarketplaceHome = ({ referenceId }) => {
                     <p className="card-text">
                       <strong>Tên:</strong> {selectedItem.name}
                     </p>
-                    <p className="card-text" style={{ fontSize: "12px" }}>
-                      <strong>Mô tả:</strong>{" "}
-                      {selectedItem.description || "Không có mô tả"}
+                    <p className="card-text" >
+                      <strong>Địa chỉ:</strong>{" "}
+                      {selectedItem.description || "Không có địa chỉ"}
                     </p>
                     <p className="card-text">
                       <strong>Giá:</strong> $
-                      {(selectedItem.priceCents / 100).toFixed(2)} USDC
+                      {(selectedItem.price.naturalAmount / 1).toFixed(2)} USDC
                     </p>
+
+                    {selectedItem.attributes && selectedItem.attributes.length > 0 && (
+                      <p className="card-text">
+                        <strong>Diện tích: </strong>
+
+
+                        {selectedItem.attributes.map((attr, index) => (
+                          <span className="text-muted">{attr.traitType}</span>                         
+                        ))}
+                       <span style={{ color: 'blue' }}> Km²</span>
+                      </p>
+
+                    )}
                   </div>
                 </div>
 
-                {selectedItem.attributes &&
+                {/* {selectedItem.attributes &&
                   selectedItem.attributes.length > 0 && (
                     <div className="card">
                       <div className="card-header">Thuộc tính</div>
@@ -712,7 +724,7 @@ const MarketplaceHome = ({ referenceId }) => {
                         ))}
                       </ul>
                     </div>
-                  )}
+                  )} */}
 
                 {buyError && (
                   <Alert variant="danger" className="mt-3">

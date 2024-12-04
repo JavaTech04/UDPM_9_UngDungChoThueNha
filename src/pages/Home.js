@@ -2,7 +2,7 @@ import axios from "axios";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { Carousel, Alert, Spinner, Modal, Form } from "react-bootstrap";
 import { apiKey } from "../utils/constants";
-import './home.css';
+import "./home.css";
 import { Box, Button, Option, Select, Typography } from "@mui/joy";
 
 const usePagination = (items, initialPerPage = 10) => {
@@ -177,7 +177,7 @@ const MarketplaceHome = ({ referenceId }) => {
     return allItems.filter(
       (itemData) =>
         itemData.type === "UniqueAsset" &&
-        itemData.item.priceCents !== null &&
+        itemData.item.price !== null &&
         itemData.item.owner.referenceId !== referenceId
     );
   }, [allItems, referenceId]);
@@ -567,8 +567,6 @@ const MarketplaceHome = ({ referenceId }) => {
         <div className="row row-cols-1 row-cols-md-4 g-4 mt-2">
           {currentItems.map((itemData) => {
             const item = itemData.item;
-            // console.log("â", item);
-            // console.log("â", item?.price?.naturalAmount);
             return (
               <div key={item.id} className="col">
                 <div className="custom-card shadow-lg">

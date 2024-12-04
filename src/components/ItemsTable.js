@@ -187,7 +187,6 @@ const ItemsTable = ({ ownerReferenceId }) => {
     setListingError(null);
 
     try {
-      console.log(selectedCurrency);
 
       const response = await fetch(
         `https://api.gameshift.dev/nx/unique-assets/${selectedItem.id}/list-for-sale`,
@@ -416,120 +415,124 @@ const ItemsTable = ({ ownerReferenceId }) => {
         ) : (
           <>
             <Sheet sx={{ backgroundColor: "transparent" }}>
-              <Table sx={{ backgroundColor: "transparent" }} borderAxis="both" >
+              <Table sx={{ backgroundColor: "transparent" }} borderAxis="both">
                 <thead>
                   <tr>
-                    <th style={{ width: "80px" }} className="text-center">Hình Ảnh</th>
-                    <th style={{ width: "180px" }} className="text-center">Tên</th>
-                    <th style={{ width: "120px" }} className="text-center">Trạng Thái </th>
-                    <th style={{ width: "90px" }} className="text-center">Loại</th>
-                    <th style={{ width: "200px" }} className="text-center">Địa chỉ</th>
+                    <th style={{ width: "80px" }} className="text-center">
+                      Hình Ảnh
+                    </th>
+                    <th style={{ width: "180px" }} className="text-center">
+                      Tên
+                    </th>
+                    <th style={{ width: "120px" }} className="text-center">
+                      Trạng Thái{" "}
+                    </th>
+                    <th style={{ width: "90px" }} className="text-center">
+                      Loại
+                    </th>
+                    <th style={{ width: "200px" }} className="text-center">
+                      Địa chỉ
+                    </th>
                     {/* <th style={{ width: "200px" }} className="text-center">Diện tích</th> */}
-                    <th style={{ width: "150px" }} className="text-center">Hành Động</th>
+                    <th style={{ width: "150px" }} className="text-center">
+                      Hành Động
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
-                  {
-                    currentItems.map((itemData, index) => {
-                      const { type, item } = itemData;
-                      if (type === "Currency") return null;
+                  {currentItems.map((itemData, index) => {
+                    const { type, item } = itemData;
+                    if (type === "Currency") return null;
 
-                      return (
-                        <tr key={index}>
-                          <td className="text-center">
-                            <Box
-                              component="img"
-                              src={item.imageUrl}
-                              alt={item.name}
-                              title={item.name}
-                              sx={{
-                                width: 100,
-                                height: 100,
-                                borderRadius: "4px",
-                                objectFit: "cover",
-                                border: "1px solid #ddd",
-                                padding: "2px",
-                              }}
-                            />
-                          </td>
-                          <td>
-                            <Typography
-                              level="body1"
-                              fontWeight="md"
-                              noWrap
-                              sx={{
-                                mb: 0.5,
-                              }}
-                            >
-                              {item.name || item.symbol || "-"}
-                            </Typography>
-                            <Typography
-                              level="body3"
-                              color="neutral"
-                              sx={{
-                                display: "block",
-                                wordWrap: "break-word",
-                              }}
-                            >
-                              ID: {truncateText(item.id, 15)}
-                            </Typography>
-                          </td>
-                          <td className="text-center">
-                            {item.priceCents > 0 && item.status === "Committed" ? (
-                              <Box>
-                                <Chip
-                                  level="body2"
-                                  fontWeight="lg"
-                                  color="success"
-                                  sx={{ mb: 0.5 }}
-                                >
-                                  Đang Bán
-                                </Chip>
-                                <Typography
-                                  level="body3"
-                                  color="neutral"
-                                  sx={{ fontSize: "0.875rem" }}
-                                >
-                                  {(item.priceCents / 100).toFixed(2)} USDC
-                                </Typography>
-                              </Box>
-                            ) : (
+                    return (
+                      <tr key={index}>
+                        <td className="text-center">
+                          <Box
+                            component="img"
+                            src={item.imageUrl}
+                            alt={item.name}
+                            title={item.name}
+                            sx={{
+                              width: 100,
+                              height: 100,
+                              borderRadius: "4px",
+                              objectFit: "cover",
+                              border: "1px solid #ddd",
+                              padding: "2px",
+                            }}
+                          />
+                        </td>
+                        <td>
+                          <Typography
+                            level="body1"
+                            fontWeight="md"
+                            noWrap
+                            sx={{
+                              mb: 0.5,
+                            }}
+                          >
+                            {item.name || item.symbol || "-"}
+                          </Typography>
+                          <Typography
+                            level="body3"
+                            color="neutral"
+                            sx={{
+                              display: "block",
+                              wordWrap: "break-word",
+                            }}
+                          >
+                            ID: {truncateText(item.id, 15)}
+                          </Typography>
+                        </td>
+                        <td className="text-center">
+                          {item.priceCents > 0 &&
+                          item.status === "Committed" ? (
+                            <Box>
                               <Chip
                                 level="body2"
-                                fontWeight="md"
-                                color="danger"
+                                fontWeight="lg"
+                                color="success"
+                                sx={{ mb: 0.5 }}
                               >
-                                Chưa Bán
+                                Đang Bán
                               </Chip>
-                            )}
-                          </td>
-                          <td className="text-center">
-                            <Chip
-                              color="primary"
-                              size="md"
-                              variant="soft"
-                            >
-                              {itemData.type}
-                            </Chip>
-                          </td>
-                          <td>
-                            {type !== "Currency" && (
                               <Typography
-                                level="body2"
-                                noWrap
-                                title={item.description}
-                                sx={{
-                                  maxWidth: 300,
-                                  overflow: "hidden",
-                                  textOverflow: "ellipsis",
-                                  whiteSpace: "nowrap",
-                                }}
+                                level="body3"
+                                color="neutral"
+                                sx={{ fontSize: "0.875rem" }}
                               >
-                                {item.description || "-"}
+                                {(item.priceCents / 100).toFixed(2)} USDC
                               </Typography>
-                            )}
-                          </td>
-                          {/* <td>
+                            </Box>
+                          ) : (
+                            <Chip level="body2" fontWeight="md" color="danger">
+                              Chưa Bán
+                            </Chip>
+                          )}
+                        </td>
+                        <td className="text-center">
+                          <Chip color="primary" size="md" variant="soft">
+                            {itemData.type}
+                          </Chip>
+                        </td>
+                        <td>
+                          {type !== "Currency" && (
+                            <Typography
+                              level="body2"
+                              noWrap
+                              title={item.description}
+                              sx={{
+                                maxWidth: 300,
+                                overflow: "hidden",
+                                textOverflow: "ellipsis",
+                                whiteSpace: "nowrap",
+                              }}
+                            >
+                              {item.description || "-"}
+                            </Typography>
+                          )}
+                        </td>
+                        {/* <td>
                             {type !== "Currency" && (
                               <Typography
                                 level="body2"
@@ -546,56 +549,58 @@ const ItemsTable = ({ ownerReferenceId }) => {
                               </Typography>
                             )}
                           </td> */}
-                          <td className="text-center">
-                            {type === "UniqueAsset" && (
-                              <Box
-                                sx={{
-                                  display: "flex",
-                                  gap: 1,
-                                  justifyContent: "center",
-                                  alignItems: "center",
-                                }}
-                              >
-                                {!(item.priceCents > 0 && item.status === "Committed") && (
-                                  <Button
-                                    variant="solid"
-                                    color="neutral"
-                                    size="sm"
-                                    onClick={() => openEditModal(item)}
-                                  >
-                                    Sửa
-                                  </Button>
-                                )}
+                        <td className="text-center">
+                          {type === "UniqueAsset" && (
+                            <Box
+                              sx={{
+                                display: "flex",
+                                gap: 1,
+                                justifyContent: "center",
+                                alignItems: "center",
+                              }}
+                            >
+                              {!(
+                                item.priceCents > 0 &&
+                                item.status === "Committed"
+                              ) && (
+                                <Button
+                                  variant="solid"
+                                  color="neutral"
+                                  size="sm"
+                                  onClick={() => openEditModal(item)}
+                                >
+                                  Sửa
+                                </Button>
+                              )}
 
-                                {item.priceCents > 0 && item.status === "Committed" ? (
-                                  <Button
-                                    variant="solid"
-                                    color="danger"
-                                    size="sm"
-                                    onClick={() => handleCancelSale(item.id)}
-                                    disabled={isProcessing}
-                                    loading={isProcessing}
-                                  >
-                                    {isProcessing ? "Đang Xử Lý..." : "Hủy Bán"}
-                                  </Button>
-                                ) : (
-                                  <Button
-                                    variant="solid"
-                                    color="primary"
-                                    size="sm"
-                                    onClick={() => openListingModal(item)}
-                                  >
-                                    Liệt Kê Bán
-                                  </Button>
-                                )}
-                              </Box>
-                            )}
-                          </td>
-
-                        </tr>
-                      )
-                    })
-                  }
+                              {item.price !== null &&
+                              item.status === "Committed" ? (
+                                <Button
+                                  variant="solid"
+                                  color="danger"
+                                  size="sm"
+                                  onClick={() => handleCancelSale(item.id)}
+                                  disabled={isProcessing}
+                                  loading={isProcessing}
+                                >
+                                  {isProcessing ? "Đang Xử Lý..." : "Hủy Bán"}
+                                </Button>
+                              ) : (
+                                <Button
+                                  variant="solid"
+                                  color="primary"
+                                  size="sm"
+                                  onClick={() => openListingModal(item)}
+                                >
+                                  Liệt Kê Bán
+                                </Button>
+                              )}
+                            </Box>
+                          )}
+                        </td>
+                      </tr>
+                    );
+                  })}
                 </tbody>
               </Table>
             </Sheet>
@@ -611,7 +616,7 @@ const ItemsTable = ({ ownerReferenceId }) => {
                     value={itemsPerPage}
                     onChange={(e) => {
                       setItemsPerPage(Number(e.target.value));
-                      setCurrentPage(1); 
+                      setCurrentPage(1);
                     }}
                   >
                     {[5, 10, 20, 50].map((size) => (
@@ -730,7 +735,7 @@ const ItemsTable = ({ ownerReferenceId }) => {
             </Form.Group>
           </Form>
         </Modal.Body>
-        <Modal.Footer>         
+        <Modal.Footer>
           <Button
             variant="secondary"
             onClick={() => setShowListingModal(false)}

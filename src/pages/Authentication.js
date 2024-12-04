@@ -52,7 +52,7 @@ const AuthForm = ({ setIsLoggedIn, setUserData }) => {
 
   const connectPhantomWallet = async () => {
     if (!isPhantomInstalled) {
-      toast.error("Phantom Wallet chưa được cài đặt");
+      toast.error("Phantom Wallet chưa được cài đặt!");
       return null;
     }
 

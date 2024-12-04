@@ -1,16 +1,9 @@
 import axios from "axios";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import { Alert, Card, Form, Modal, Spinner } from "react-bootstrap";
+import { Carousel, Alert, Spinner, Modal, Form } from "react-bootstrap";
 import { apiKey } from "../utils/constants";
-import {
-  Box,
-  Button,
-  Chip,
-  Container,
-  Option,
-  Select,
-  Typography,
-} from "@mui/joy";
+import './home.css';
+import { Box, Button, Option, Select, Typography } from "@mui/joy";
 
 const usePagination = (items, initialPerPage = 10) => {
   const [pagination, setPagination] = useState({
@@ -205,7 +198,7 @@ const MarketplaceHome = ({ referenceId }) => {
                 perPage: 100,
                 page: page,
                 // collectionId: "791f789f-dd74-41bd-b74e-f1ddf71727fd",
-                collectionId: "ea9d4055-6d86-40f4-b58e-f652d8489328",
+                collectionId: "2829c24d-1df2-4b8d-b927-eb15a1ac2b63",
               },
               headers: {
                 accept: "application/json",
@@ -215,7 +208,6 @@ const MarketplaceHome = ({ referenceId }) => {
           );
           return response.data;
         };
-
         let allFetchedItems = [];
         let page = 1;
         let totalPages = 1;
@@ -384,28 +376,241 @@ const MarketplaceHome = ({ referenceId }) => {
   }
 
   return (
-    <Container>
-      <div className="container">
-        {/* Thêm thông báo thời gian cập nhật cuối cùng */}
+    <>
+      <header className="bg-primary text-white p-3 text-center">
+        <h1>
+          <div className="scrolling-text">
+            Chào mừng đến với cửa hàng của chúng tôi! Khám phá các sản phẩm
+            tuyệt vời ngay hôm nay.
+          </div>
+        </h1>
+      </header>
+      <section>
+        <Carousel interval={2000}>
+          <Carousel.Item>
+            <img
+              className="d-block w-100"
+              src="https://www.nhatot.com/_next/image?url=https%3A%2F%2Fcdn.chotot.com%2Fadmincentre%2FF1Iy8pIV295wRSonsdRDkQyFRY2Thcip3egSSilkyBg%2Fpreset%3Araw%2Fplain%2F9b8dc9ce0f6367d20b2b06856688d446-2820459848732268726.jpg&w=1920&q=75"
+              alt="First slide"
+            />
+          </Carousel.Item>
+          <Carousel.Item>
+            <img
+              className="d-block w-100"
+              src="https://www.nhatot.com/_next/image?url=https%3A%2F%2Fcdn.chotot.com%2Fadmincentre%2FyBhtF0umYzoin8P-zvuOPNhhuN7CKpYIK9HFGLu6K0w%2Fpreset%3Araw%2Fplain%2Ff828d23ca5817fc621868c24ac02ec41-2906689577158153760.jpg&w=1920&q=75"
+              alt="Second slide"
+            />
+          </Carousel.Item>
+          <Carousel.Item>
+            <img
+              className="d-block w-100"
+              src="https://www.nhatot.com/_next/image?url=https%3A%2F%2Fcdn.chotot.com%2Fadmincentre%2F5brlsfjgobqb6GHL_ARdJ9hKlwZBeUPMFTDCDJ8HVlM%2Fpreset%3Araw%2Fplain%2F641d00cf91962826635b6a63d18d673a-2887378227930944686.jpg&w=1920&q=75"
+              alt="Third slide"
+            />
+          </Carousel.Item>
+        </Carousel>
+      </section>
+      <section
+        className="property-listing"
+        style={{
+          background: "linear-gradient(to right, #0288D1, white, #FF5722)",
+          padding: "50px",
+        }}
+      >
+        <h2 className="m-3">Mua bán nhà đất theo địa điểm</h2>
+        <div className="row">
+          <div className="col-md-4">
+            <div className="card">
+              <div className="card-img-top" style={{ position: "relative" }}>
+                <img
+                  src="https://bannha.net/wp-content/uploads/elementor/thumbs/hn7-q47ou0cu5z7x80rl9givgifa97bzo3wgbardc246vk.jpg"
+                  className="img-fluid"
+                  alt="Property"
+                  style={{ width: "450px", height: "200px" }}
+                />
+                <div
+                  className="card-location"
+                  style={{
+                    position: "absolute",
+                    bottom: "10px",
+                    left: "10px",
+                    background: "rgba(0, 0, 0, 0.5)",
+                    color: "white",
+                    padding: "5px",
+                  }}
+                >
+                  Hanoi
+                </div>
+              </div>
+            </div>
+            <div className="card">
+              <div className="card-img-top" style={{ position: "relative" }}>
+                <img
+                  src="https://bannha.net/wp-content/uploads/elementor/thumbs/thanh-pho-moi-binh-duong-o-dau-q47oudiktnpxqk8h4m7nff3qklj4nvcp13w61xkogg.jpg"
+                  className="img-fluid"
+                  alt="Property"
+                  style={{ width: "450px", height: "200px" }}
+                />
+                <div
+                  className="card-location"
+                  style={{
+                    position: "absolute",
+                    bottom: "10px",
+                    left: "10px",
+                    background: "rgba(0, 0, 0, 0.5)",
+                    color: "white",
+                    padding: "5px",
+                  }}
+                >
+                  Binh Duong
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="col-md-4" style={{ marginTop: "55px" }}>
+            <div className="card">
+              <div className="card-img-top" style={{ position: "relative" }}>
+                <img
+                  src="https://bannha.net/wp-content/uploads/2024/03/TPHCM.jpg"
+                  className="img-fluid"
+                  alt="Property"
+                />
+                <div
+                  className="card-location"
+                  style={{
+                    position: "absolute",
+                    bottom: "10px",
+                    left: "10px",
+                    background: "rgba(0, 0, 0, 0.5)",
+                    color: "white",
+                    padding: "5px",
+                  }}
+                >
+                  Ho Chi Minh
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="col-md-4">
+            <div className="card">
+              <div className="card-img-top" style={{ position: "relative" }}>
+                <img
+                  src="https://bannha.net/wp-content/uploads/elementor/thumbs/du-lich-da-nang-q47ou52145ecu2kri0k0az8l84otqlf3zy0sqfx80g.jpg"
+                  className="img-fluid"
+                  alt="Property"
+                  style={{ width: "450px", height: "200px" }}
+                />
+                <div
+                  className="card-location"
+                  style={{
+                    position: "absolute",
+                    bottom: "10px",
+                    left: "10px",
+                    background: "rgba(0, 0, 0, 0.5)",
+                    color: "white",
+                    padding: "5px",
+                  }}
+                >
+                  Da Nang
+                </div>
+              </div>
+            </div>
+            <div className="card">
+              <div className="card-img-top" style={{ position: "relative" }}>
+                <img
+                  src="https://bannha.net/wp-content/uploads/elementor/thumbs/dan-so-vung-tau-3-q47oui7rrtwdcm1nd68s9vx1jivyqcvcpr5lgbdplc.jpg"
+                  alt="Property"
+                  style={{ width: "450px", height: "200px" }}
+                />
+                <div
+                  className="card-location"
+                  style={{
+                    position: "absolute",
+                    bottom: "10px",
+                    left: "10px",
+                    background: "rgba(0, 0, 0, 0.5)",
+                    color: "white",
+                    padding: "5px",
+                  }}
+                >
+                  Vung Tau
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div className="container-fluid">
+        {/* Pagination and display controls */}
         <Box
           sx={{
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
             marginTop: 3,
-            marginBottom: 3,
           }}
         >
-          <Typography className="text-muted">
-            Cập nhật lần cuối: {new Date(lastFetchTime).toLocaleString()}
-          </Typography>
-          <Button size="sm" onClick={handleManualRefresh}>
-            Làm mới ngay
-          </Button>
+          <div style={{ fontSize: "24px", fontWeight: "500" }}>
+            Sản phẩm đang bán
+          </div>
+          <div className="text-end" style={{ flexDirection: "column" }}>
+            <Button size="sm" onClick={handleManualRefresh}>
+              Làm mới ngay
+            </Button>
+            <Typography className="text-muted">
+              Cập nhật lần cuối: {new Date(lastFetchTime).toLocaleString()}
+            </Typography>
+          </div>
         </Box>
+        {/* Product grid */}
+        <div className="row row-cols-1 row-cols-md-4 g-4 mt-2">
+          {currentItems.map((itemData) => {
+            const item = itemData.item;
+            // console.log("â", item);
+            // console.log("â", item?.price?.naturalAmount);
+            return (
+              <div key={item.id} className="col">
+                <div className="custom-card shadow-lg">
+                  <div className="custom-card-img">
+                    <img
+                      src={item.imageUrl || "/default-image.jpg"}
+                      alt={item.name || "Hình ảnh sản phẩm"}
+                      className="w-100 h-100"
+                    />
+                  </div>
+                  <div className="custom-card-body">
+                    <h5 className="fw-bold">{item.name}</h5>
+                    <p className="text-muted small">
+                      Tác giả:{" "}
+                      {item.owner.referenceId.length > 20
+                        ? `${item.owner.referenceId.substring(0, 20)}...`
+                        : item.owner.referenceId}
+                    </p>
+                    <div className="d-flex justify-content-between align-items-center">
+                      <span className="price-tag">
+                        {item?.price?.naturalAmount &&
+                        !isNaN(Number(item?.price?.naturalAmount))
+                          ? `$${Number(item?.price?.naturalAmount).toFixed(
+                              2
+                            )} USDC`
+                          : "N/A"}
+                      </span>
+                      <button
+                        className="btn-custom"
+                        onClick={() => handleBuyItem(itemData)}
+                      >
+                        Mua ngay
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
 
-        {/* Pagination and display controls */}
-        <div className="row g-3 align-items-center">
+        <div className="row g-3 align-items-center mt-3">
           <Box className="col-12 col-md-4 d-flex align-items-center justify-content-between justify-content-md-start">
             <Typography className="me-3 text-nowrap">
               Hiển thị: {currentItems.length} / {totalResults} sản phẩm
@@ -448,52 +653,6 @@ const MarketplaceHome = ({ referenceId }) => {
             </Form.Select>
           </div>
         </div>
-
-        {/* Product grid */}
-        <div className="row row-cols-1 row-cols-md-3 g-4 mt-2">
-          {currentItems.map((itemData) => {
-            const item = itemData.item;
-            return (
-              <div key={item.id} className="col">
-                <Card className="h-100 d-flex flex-column shadow-sm hover-lift">
-                  <Card.Img
-                    variant="top"
-                    src={item.imageUrl || "/default-image.jpg"}
-                    alt={item.name || "Hình ảnh sản phẩm"}
-                    className="card-img-top"
-                    style={{
-                      width: "100%",
-                      height: "auto",
-                      aspectRatio: "16/9",
-                      objectFit: "cover",
-                    }}
-                  />
-                  <Card.Body style={{ flex: 1 }}>
-                    <Card.Title className="fw-bold">{item.name}</Card.Title>
-                    <Card.Text className="text-muted">
-                      Tác giả: {item.owner.referenceId}
-                    </Card.Text>
-
-                    <div className="d-flex justify-content-between align-items-center mt-auto">
-                      <div>
-                        <Chip color="primary" variant="soft">{`$${(
-                          item.priceCents / 100
-                        ).toFixed(2)} USDC`}</Chip>
-                      </div>
-                      <Button
-                        variant="btn btn-primary"
-                        sx={{ color: "#fff" }}
-                        onClick={() => handleBuyItem(itemData)}
-                      >
-                        Mua ngay
-                      </Button>
-                    </div>
-                  </Card.Body>
-                </Card>
-              </div>
-            );
-          })}
-        </div>
       </div>
       {/* Purchase Confirmation Modal */}
       {selectedItem && (
@@ -526,7 +685,7 @@ const MarketplaceHome = ({ referenceId }) => {
                     <p className="card-text">
                       <strong>Tên:</strong> {selectedItem.name}
                     </p>
-                    <p className="card-text">
+                    <p className="card-text" style={{ fontSize: "12px" }}>
                       <strong>Mô tả:</strong>{" "}
                       {selectedItem.description || "Không có mô tả"}
                     </p>
@@ -597,7 +756,7 @@ const MarketplaceHome = ({ referenceId }) => {
           </Modal.Footer>
         </Modal>
       )}
-    </Container>
+    </>
   );
 };
 

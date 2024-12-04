@@ -307,7 +307,7 @@ const CreateProduct = ({ referenceId, collectionId, onSuccess }) => {
             </div>
 
             <div className="row mb-3">
-              <div className="col-md-12">
+              <div className="col-md-6">
                 <label className="form-label">Diện tích <span style={{ color: 'blue' }}>(Km²)</span> <span style={{ color: 'red' }}>*</span></label>
                 <input
                   type="number"
@@ -323,7 +323,7 @@ const CreateProduct = ({ referenceId, collectionId, onSuccess }) => {
                   <div className="invalid-feedback">{formErrors.attributeName}</div>
                 )}
               </div>
-              {/* <div className="col-md-6">
+              <div className="col-md-6">
                 <label className="form-label">Giá trị thuộc tính <span style={{ color: 'red' }}>*</span></label>
                 <input
                   type="text"
@@ -338,7 +338,7 @@ const CreateProduct = ({ referenceId, collectionId, onSuccess }) => {
                 {formErrors.attributeValue && (
                   <div className="invalid-feedback">{formErrors.attributeValue}</div>
                 )}
-              </div> */}
+              </div>
             </div>
 
 

@@ -208,7 +208,6 @@ const MarketplaceHome = ({ referenceId }) => {
           );
           return response.data;
         };
-
         let allFetchedItems = [];
         let page = 1;
         let totalPages = 1;
@@ -568,6 +567,8 @@ const MarketplaceHome = ({ referenceId }) => {
         <div className="row row-cols-1 row-cols-md-4 g-4 mt-2">
           {currentItems.map((itemData) => {
             const item = itemData.item;
+            console.log("â", item);
+            console.log("â", item?.price?.naturalAmount);
             return (
               <div key={item.id} className="col">
                 <div className="custom-card shadow-lg">
@@ -587,9 +588,14 @@ const MarketplaceHome = ({ referenceId }) => {
                         : item.owner.referenceId}
                     </p>
                     <div className="d-flex justify-content-between align-items-center">
-                      <span className="price-tag">{`$${(
-                        item.priceCents / 100
-                      ).toFixed(2)} USDC`}</span>
+                      <span className="price-tag">
+                        {item?.price?.naturalAmount &&
+                        !isNaN(Number(item?.price?.naturalAmount))
+                          ? `$${Number(item?.price?.naturalAmount).toFixed(
+                              2
+                            )} USDC`
+                          : "N/A"}
+                      </span>
                       <button
                         className="btn-custom"
                         onClick={() => handleBuyItem(itemData)}

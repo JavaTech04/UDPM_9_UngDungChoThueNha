@@ -119,7 +119,7 @@ const ItemsTable = ({ ownerReferenceId }) => {
           params.append("forSale", "true");
           break;
         case "notForSale":
-          params.append("priceCents", "null"); // Kiểm tra giá trị priceCents là null
+          params.append("price", "null");
           break;
         default:
           // Trường hợp tất cả
@@ -485,7 +485,7 @@ const ItemsTable = ({ ownerReferenceId }) => {
                           </Typography>
                         </td>
                         <td className="text-center">
-                          {item.priceCents > 0 &&
+                          {item.price !== null &&
                           item.status === "Committed" ? (
                             <Box>
                               <Chip
@@ -501,7 +501,7 @@ const ItemsTable = ({ ownerReferenceId }) => {
                                 color="neutral"
                                 sx={{ fontSize: "0.875rem" }}
                               >
-                                {(item.priceCents / 100).toFixed(2)} USDC
+                                {(item.price.naturalAmount / 100).toFixed(2)} USDC
                               </Typography>
                             </Box>
                           ) : (

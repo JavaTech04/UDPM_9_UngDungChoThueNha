@@ -419,11 +419,12 @@ const ItemsTable = ({ ownerReferenceId }) => {
               <Table sx={{ backgroundColor: "transparent" }} borderAxis="both" >
                 <thead>
                   <tr>
-                    <th style={{ width: "80px" }} className="text-center">Image</th>
+                    <th style={{ width: "80px" }} className="text-center">Hình Ảnh</th>
                     <th style={{ width: "180px" }} className="text-center">Tên</th>
                     <th style={{ width: "120px" }} className="text-center">Trạng Thái </th>
                     <th style={{ width: "90px" }} className="text-center">Loại</th>
-                    <th style={{ width: "200px" }} className="text-center">Mô tả</th>
+                    <th style={{ width: "200px" }} className="text-center">Địa chỉ</th>
+                    {/* <th style={{ width: "200px" }} className="text-center">Diện tích</th> */}
                     <th style={{ width: "150px" }} className="text-center">Hành Động</th>
                   </tr>
                 </thead>
@@ -476,14 +477,14 @@ const ItemsTable = ({ ownerReferenceId }) => {
                           <td className="text-center">
                             {item.priceCents > 0 && item.status === "Committed" ? (
                               <Box>
-                                <Typography
+                                <Chip
                                   level="body2"
-                                  fontWeight="md"
+                                  fontWeight="lg"
                                   color="success"
                                   sx={{ mb: 0.5 }}
                                 >
                                   Đang Bán
-                                </Typography>
+                                </Chip>
                                 <Typography
                                   level="body3"
                                   color="neutral"
@@ -493,13 +494,13 @@ const ItemsTable = ({ ownerReferenceId }) => {
                                 </Typography>
                               </Box>
                             ) : (
-                              <Typography
+                              <Chip
                                 level="body2"
                                 fontWeight="md"
                                 color="danger"
                               >
                                 Chưa Bán
-                              </Typography>
+                              </Chip>
                             )}
                           </td>
                           <td className="text-center">
@@ -518,7 +519,7 @@ const ItemsTable = ({ ownerReferenceId }) => {
                                 noWrap
                                 title={item.description}
                                 sx={{
-                                  maxWidth: 200,
+                                  maxWidth: 300,
                                   overflow: "hidden",
                                   textOverflow: "ellipsis",
                                   whiteSpace: "nowrap",
@@ -528,6 +529,23 @@ const ItemsTable = ({ ownerReferenceId }) => {
                               </Typography>
                             )}
                           </td>
+                          {/* <td>
+                            {type !== "Currency" && (
+                              <Typography
+                                level="body2"
+                                noWrap
+                                title={item.attributeName}
+                                sx={{
+                                  maxWidth: 50,
+                                  overflow: "hidden",
+                                  textOverflow: "ellipsis",
+                                  whiteSpace: "nowrap",
+                                }}
+                              >
+                                {item.attributeName || "-"}
+                              </Typography>
+                            )}
+                          </td> */}
                           <td className="text-center">
                             {type === "UniqueAsset" && (
                               <Box
@@ -540,7 +558,7 @@ const ItemsTable = ({ ownerReferenceId }) => {
                               >
                                 {!(item.priceCents > 0 && item.status === "Committed") && (
                                   <Button
-                                    variant="outlined"
+                                    variant="solid"
                                     color="neutral"
                                     size="sm"
                                     onClick={() => openEditModal(item)}
@@ -551,7 +569,7 @@ const ItemsTable = ({ ownerReferenceId }) => {
 
                                 {item.priceCents > 0 && item.status === "Committed" ? (
                                   <Button
-                                    variant="soft"
+                                    variant="solid"
                                     color="danger"
                                     size="sm"
                                     onClick={() => handleCancelSale(item.id)}
@@ -562,7 +580,7 @@ const ItemsTable = ({ ownerReferenceId }) => {
                                   </Button>
                                 ) : (
                                   <Button
-                                    variant="soft"
+                                    variant="solid"
                                     color="primary"
                                     size="sm"
                                     onClick={() => openListingModal(item)}
@@ -593,7 +611,7 @@ const ItemsTable = ({ ownerReferenceId }) => {
                     value={itemsPerPage}
                     onChange={(e) => {
                       setItemsPerPage(Number(e.target.value));
-                      setCurrentPage(1); // Reset về trang đầu
+                      setCurrentPage(1); 
                     }}
                   >
                     {[5, 10, 20, 50].map((size) => (
@@ -712,8 +730,7 @@ const ItemsTable = ({ ownerReferenceId }) => {
             </Form.Group>
           </Form>
         </Modal.Body>
-        <Modal.Footer>
-          {/* Nút hủy và xác nhận */}
+        <Modal.Footer>         
           <Button
             variant="secondary"
             onClick={() => setShowListingModal(false)}
@@ -722,9 +739,10 @@ const ItemsTable = ({ ownerReferenceId }) => {
             Hủy
           </Button>
           <Button
-            variant="primary"
+            color="primary"
             onClick={handleListForSale}
             disabled={isProcessing || !listingPrice}
+            variant="solid"
           >
             {isProcessing ? "Đang Xử Lý..." : "Liệt Kê Bán"}
           </Button>

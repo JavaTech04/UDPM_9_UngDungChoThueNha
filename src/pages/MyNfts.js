@@ -50,9 +50,9 @@ const CreateProduct = ({ referenceId, collectionId, onSuccess }) => {
     }
 
     if (!formData.description.trim()) {
-      errors.description = "Mô tả là bắt buộc";
+      errors.description = "Địa chỉ là bắt buộc";
     } else if (formData.description.length > 100) {
-      errors.description = "Mô tả không được vượt quá 100 ký tự";
+      errors.description = "Địa chỉ không được vượt quá 100 ký tự";
     }
 
     if (!formData.image) {
@@ -288,16 +288,34 @@ const CreateProduct = ({ referenceId, collectionId, onSuccess }) => {
               )}
             </div>
 
+            <div className="mb-3">
+              <label className="form-label">Địa chỉ <span style={{ color: 'red' }}>*</span></label>
+              <input
+              type="text"
+                className={`form-control ${formErrors.description ? 'is-invalid' : ''}`}
+                name="description"
+                value={formData.description}
+                onChange={handleInputChange}
+                rows="3"
+                placeholder="Nhập địa chỉ"
+                disabled={isSubmitting}
+                maxLength={64}
+              />
+              {formErrors.description && (
+                <div className="invalid-feedback">{formErrors.description}</div>
+              )}
+            </div>
+
             <div className="row mb-3">
-              <div className="col-md-6">
-                <label className="form-label">Tên thuộc tính <span style={{ color: 'red' }}>*</span></label>
+              <div className="col-md-12">
+                <label className="form-label">Diện tích <span style={{ color: 'blue' }}>(Km²)</span> <span style={{ color: 'red' }}>*</span></label>
                 <input
-                  type="text"
+                  type="number"
                   className={`form-control ${formErrors.attributeName ? 'is-invalid' : ''}`}
                   name="attributeName"
                   value={formData.attributeName}
                   onChange={handleInputChange}
-                  placeholder="Nhập tên thuộc tính"
+                  placeholder="Nhập diện tích"
                   disabled={isSubmitting}
                   maxLength={30}  
                 />
@@ -305,7 +323,7 @@ const CreateProduct = ({ referenceId, collectionId, onSuccess }) => {
                   <div className="invalid-feedback">{formErrors.attributeName}</div>
                 )}
               </div>
-              <div className="col-md-6">
+              {/* <div className="col-md-6">
                 <label className="form-label">Giá trị thuộc tính <span style={{ color: 'red' }}>*</span></label>
                 <input
                   type="text"
@@ -315,12 +333,12 @@ const CreateProduct = ({ referenceId, collectionId, onSuccess }) => {
                   onChange={handleInputChange}
                   placeholder="Nhập giá trị thuộc tính"
                   disabled={isSubmitting}
-                  maxLength={30}  // Set max length to 30
+                  maxLength={30}  
                 />
                 {formErrors.attributeValue && (
                   <div className="invalid-feedback">{formErrors.attributeValue}</div>
                 )}
-              </div>
+              </div> */}
             </div>
 
 
@@ -358,22 +376,7 @@ const CreateProduct = ({ referenceId, collectionId, onSuccess }) => {
               </div>
             </div>
 
-            <div className="mb-3">
-              <label className="form-label">Mô tả <span style={{ color: 'red' }}>*</span></label>
-              <textarea
-                className={`form-control ${formErrors.description ? 'is-invalid' : ''}`}
-                name="description"
-                value={formData.description}
-                onChange={handleInputChange}
-                rows="3"
-                placeholder="Nhập mô tả"
-                disabled={isSubmitting}
-                maxLength={64}
-              />
-              {formErrors.description && (
-                <div className="invalid-feedback">{formErrors.description}</div>
-              )}
-            </div>
+            
 
 
             {uploadProgress > 0 && (
@@ -414,8 +417,7 @@ const CreateProduct = ({ referenceId, collectionId, onSuccess }) => {
           </Button>
         </Modal.Footer>
       </Modal>
-
-      {/* Result Modal */}
+     
       <Modal show={showResultModal} onHide={() => setShowResultModal(false)}>
         <Modal.Header closeButton>
           <Modal.Title>{isSuccess ? "Thành công" : "Lỗi"}</Modal.Title>

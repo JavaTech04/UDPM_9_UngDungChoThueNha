@@ -423,7 +423,8 @@ const ItemsTable = ({ ownerReferenceId }) => {
                     <th style={{ width: "180px" }} className="text-center">Tên</th>
                     <th style={{ width: "120px" }} className="text-center">Trạng Thái </th>
                     <th style={{ width: "90px" }} className="text-center">Loại</th>
-                    <th style={{ width: "200px" }} className="text-center">Mô Tả</th>
+                    <th style={{ width: "200px" }} className="text-center">Địa chỉ</th>
+                    {/* <th style={{ width: "200px" }} className="text-center">Diện tích</th> */}
                     <th style={{ width: "150px" }} className="text-center">Hành Động</th>
                   </tr>
                 </thead>
@@ -518,7 +519,7 @@ const ItemsTable = ({ ownerReferenceId }) => {
                                 noWrap
                                 title={item.description}
                                 sx={{
-                                  maxWidth: 200,
+                                  maxWidth: 300,
                                   overflow: "hidden",
                                   textOverflow: "ellipsis",
                                   whiteSpace: "nowrap",
@@ -528,6 +529,23 @@ const ItemsTable = ({ ownerReferenceId }) => {
                               </Typography>
                             )}
                           </td>
+                          {/* <td>
+                            {type !== "Currency" && (
+                              <Typography
+                                level="body2"
+                                noWrap
+                                title={item.attributeName}
+                                sx={{
+                                  maxWidth: 50,
+                                  overflow: "hidden",
+                                  textOverflow: "ellipsis",
+                                  whiteSpace: "nowrap",
+                                }}
+                              >
+                                {item.attributeName || "-"}
+                              </Typography>
+                            )}
+                          </td> */}
                           <td className="text-center">
                             {type === "UniqueAsset" && (
                               <Box
@@ -593,7 +611,7 @@ const ItemsTable = ({ ownerReferenceId }) => {
                     value={itemsPerPage}
                     onChange={(e) => {
                       setItemsPerPage(Number(e.target.value));
-                      setCurrentPage(1); // Reset về trang đầu
+                      setCurrentPage(1); 
                     }}
                   >
                     {[5, 10, 20, 50].map((size) => (
@@ -712,8 +730,7 @@ const ItemsTable = ({ ownerReferenceId }) => {
             </Form.Group>
           </Form>
         </Modal.Body>
-        <Modal.Footer>
-          {/* Nút hủy và xác nhận */}
+        <Modal.Footer>         
           <Button
             variant="secondary"
             onClick={() => setShowListingModal(false)}

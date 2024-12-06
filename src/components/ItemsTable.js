@@ -559,7 +559,7 @@ const ItemsTable = ({ ownerReferenceId }) => {
                                 alignItems: "center",
                               }}
                             >
-                              {!(
+                              {/* {!(
                                 item.priceCents > 0 &&
                                 item.status === "Committed"
                               ) && (
@@ -571,7 +571,7 @@ const ItemsTable = ({ ownerReferenceId }) => {
                                 >
                                   Sửa
                                 </Button>
-                              )}
+                              )} */}
 
                               {item.price !== null &&
                               item.status === "Committed" ? (

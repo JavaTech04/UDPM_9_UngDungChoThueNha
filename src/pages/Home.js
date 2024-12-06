@@ -230,7 +230,7 @@ const MarketplaceHome = ({ referenceId }) => {
         if (axios.isCancel(err)) {
           console.log("Request canceled", err.message);
         } else {
-          setError("Không thể tải danh sách sản phẩm: " + err.message);
+          setError("Không thể tải danh sách căn hộ: " + err.message);
           console.error("Fetch error:", err);
         }
       } finally {
@@ -324,7 +324,7 @@ const MarketplaceHome = ({ referenceId }) => {
       window.open(consentUrl, "_blank");
       fetchAllItems();
     } catch (err) {
-      console.error("Lỗi mua sản phẩm:", err);
+      console.error("Lỗi thuê căn hộ:", err);
 
       const errorMessage =
         err.response?.data?.message ||
@@ -379,7 +379,7 @@ const MarketplaceHome = ({ referenceId }) => {
       <header className="bg-primary text-white p-3 text-center">
         <h1>
           <div className="scrolling-text">
-            Chào mừng đến với cửa hàng của chúng tôi! Khám phá các sản phẩm
+            Chào mừng đến với cửa hàng của chúng tôi! Khám phá các căn hộ
             tuyệt vời ngay hôm nay.
           </div>
         </h1>
@@ -551,7 +551,7 @@ const MarketplaceHome = ({ referenceId }) => {
           }}
         >
           <div style={{ fontSize: "24px", fontWeight: "500" }}>
-            Sản phẩm đang bán
+            Sàn giao dịch
           </div>
           <div className="text-end" style={{ flexDirection: "column" }}>
             <Button size="sm" onClick={handleManualRefresh}>
@@ -572,7 +572,7 @@ const MarketplaceHome = ({ referenceId }) => {
                   <div className="custom-card-img">
                     <img
                       src={item.imageUrl || "/default-image.jpg"}
-                      alt={item.name || "Hình ảnh sản phẩm"}
+                      alt={item.name || "Hình ảnh căn hộ"}
                       className="w-100 h-100"
                     />
                   </div>
@@ -610,7 +610,7 @@ const MarketplaceHome = ({ referenceId }) => {
         <div className="row g-3 align-items-center mt-3">
           <Box className="col-12 col-md-4 d-flex align-items-center justify-content-between justify-content-md-start">
             <Typography className="me-3 text-nowrap">
-              Hiển thị: {currentItems.length} / {totalResults} sản phẩm
+              Hiển thị: {currentItems.length} / {totalResults} căn hộ
             </Typography>
             <Select
               size="sm"
@@ -621,7 +621,7 @@ const MarketplaceHome = ({ referenceId }) => {
             >
               {[5, 10, 20, 50].map((num) => (
                 <Option key={num} value={num}>
-                  {num} sản phẩm/trang
+                  {num} căn hộ/trang
                 </Option>
               ))}
             </Select>
@@ -644,7 +644,7 @@ const MarketplaceHome = ({ referenceId }) => {
             >
               {[5, 10, 20, 50].map((num) => (
                 <option key={num} value={num}>
-                  {num} sản phẩm/trang
+                  {num} căn hộ/trang
                 </option>
               ))}
             </Form.Select>
@@ -676,7 +676,7 @@ const MarketplaceHome = ({ referenceId }) => {
                 />
               </div>
               <div className="col-md-6">
-                <h5 className="mb-3">Chi tiết sản phẩm</h5>
+                <h5 className="mb-3">Chi tiết căn hộ</h5>
                 <div className="card mb-3">
                   <div className="card-body">
                     <p className="card-text">
@@ -699,7 +699,7 @@ const MarketplaceHome = ({ referenceId }) => {
                         {selectedItem.attributes.map((attr, index) => (
                           <span className="text-muted">{attr.traitType}</span>                         
                         ))}
-                       <span style={{ color: 'blue' }}> Km²</span>
+                       <span style={{ color: 'blue' }}> m²</span>
                       </p>
 
                     )}

@@ -64,7 +64,7 @@ const CreateProduct = ({ referenceId, collectionId, onSuccess }) => {
     } else if (isNaN(formData.attributeName) || formData.attributeName <= 0) {
       errors.attributeName = "Diện tích phải là số dương";
     } else if (formData.attributeName.length > 5) {
-      errors.attributeName = "Diện tích không được vượt quá 10000 Km²";
+      errors.attributeName = "Diện tích không được vượt quá 10000 m²";
     }
 
     // if (!formData.attributeValue.trim()) {
@@ -310,7 +310,7 @@ const CreateProduct = ({ referenceId, collectionId, onSuccess }) => {
 
             <div className="row mb-3">
               <div className="col-md-12">
-                <label className="form-label">Diện tích <span style={{ color: 'blue' }}>(Km²)</span> <span style={{ color: 'red' }}>*</span></label>
+                <label className="form-label">Diện tích <span style={{ color: 'blue' }}>(m²)</span> <span style={{ color: 'red' }}>*</span></label>
                 <input
                   type="number"
                   className={`form-control ${formErrors.attributeName ? 'is-invalid' : ''}`}
